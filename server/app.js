@@ -1,19 +1,10 @@
 const express = require('express');
-const db = require('mysql');
-const bodyParser = require('body-parser');
-
 const app = express();
-const cors = require('cors');
 
-app.use(cors());
-app.use(express.json());
-
-app.db = db.createPool({
-  connectionLimit: 10,
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'test',
+app.listen(3002, () => {
+  console.log('Server is running on port 3002');
 });
 
-module.exports = app;
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
