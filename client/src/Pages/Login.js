@@ -1,12 +1,25 @@
-import { LockClosedIcon, UserAddIcon } from '@heroicons/react/solid';
-import { useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router';
-import { UserContext } from '../App';
+import { LockClosedIcon } from '@heroicons/react/solid';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Axios from 'axios';
 
 export default function Login() {
-  const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  let navigate = useNavigate();
+
+  const sendPost = () => {
+    Axios.post('http://localhost:3000/login', {
+      email,
+      password,
+    })
+      .then((res) => {
+        navigate('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -31,7 +44,7 @@ export default function Login() {
               </a>
             </p>
           </div>
-          <form className='mt-8 space-y-6' action='#' method='POST'>
+          <form className='mt-8 space-y-6'>
             <input type='hidden' name='remember' defaultValue='true' />
             <div className='rounded-md shadow-sm -space-y-px'>
               <div>
@@ -46,6 +59,7 @@ export default function Login() {
                   required
                   className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                   placeholder='Email address'
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
@@ -60,6 +74,9 @@ export default function Login() {
                   required
                   className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                   placeholder='Password'
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
               </div>
             </div>
@@ -94,17 +111,7 @@ export default function Login() {
               <button
                 type='submit'
                 className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                onClick={() => {
-                  console.log('Login');
-                  if (UserAddIcon.loggedIn) {
-                    console.log('User is logged in');
-                    return;
-                  }
-                  setUser({ loggedIn: true });
-                  if (location.state?.from) {
-                    navigate(location.state.from);
-                  }
-                }}
+                onClick={sendPost}
               >
                 <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
                   <LockClosedIcon
