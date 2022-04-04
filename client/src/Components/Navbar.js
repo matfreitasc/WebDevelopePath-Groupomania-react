@@ -81,7 +81,7 @@ export default function Main() {
                           href='#'
                           className={classNames(
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
+                            'block px-4 py-2 text-sm text-gray-700 '
                           )}
                         >
                           Settings
@@ -90,15 +90,14 @@ export default function Main() {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
-                        <button
-                          type='button'
+                        <a
                           className={classNames(
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
+                            'block px-4 py-2 text-sm text-gray-700 w-full'
                           )}
                         >
                           Sign out
-                        </button>
+                        </a>
                       )}
                     </Menu.Item>
                   </Menu.Items>

@@ -5,7 +5,11 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-const port = 3001;
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
+
+const port = process.env.PORT || 3001;
 const db = require('./models');
 
 app = express();

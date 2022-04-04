@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Users } = require('../models');
 const bcrypt = require('bcrypt');
+const { verify } = require('jsonwebtoken');
 
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
@@ -46,11 +47,18 @@ router.post('/login', async (req, res) => {
           error: 'Invalid email or password',
         });
       } else {
-        req.session.user = user.id;
-        res.status(200).send(user);
+        const userId = user.id;
+        const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+          expiresIn: 300,
+        });
 
-        console.log(req.session.user, 'req.session.user');
-        console.log('user logged in');
+        res.json(
+          token,
+          {
+            result: res.body,
+          },
+          200
+        );
       }
     }
   } catch (e) {
@@ -58,6 +66,31 @@ router.post('/login', async (req, res) => {
       error: 'Error logging in',
     });
   }
+});
+
+const verifyJWT = (req, res, next) => {
+  const token = req.headers['x-access-token'];
+  if (!token) {
+    res.status(401).send({
+      error: 'No token provided',
+    });
+  } else {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(401).send({
+          error: 'Invalid token',
+          auth: false,
+        });
+      } else {
+        req.userId = decoded.id;
+        next();
+      }
+    });
+  }
+};
+
+router.get('/isUserAuthenticated', verifyJWT, (req, res) => {
+  res.send("You're Authenticated");
 });
 
 router.get('/loggedin', (req, res) => {

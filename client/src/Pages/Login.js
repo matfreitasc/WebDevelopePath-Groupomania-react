@@ -24,7 +24,7 @@ export default function Login() {
     Axios.get('http://localhost:3001/api/auth/loggedin')
       .then((res) => {
         if ((res.data = true)) {
-          navigate('/');
+          // navigate('/');
         }
       })
       .catch((err) => {
