@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import Navbar from './Navbar';
 import Axios from 'axios';
 
 function Post() {
@@ -22,6 +23,7 @@ function Post() {
 
   return (
     <div>
+      <Navbar />
       <div className='container mx-auto flex justify-center mt-5'>
         <div className='w-4/6'>
           <div className='shadow sm:rounded-md sm:overflow-hidden'>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 function Posts() {
   const [posts, setPosts] = React.useState([]);
@@ -14,6 +15,7 @@ function Posts() {
 
   return (
     <div>
+      <Navbar />
       {posts.reverse().map((post) => (
         <div
           key={post.id}

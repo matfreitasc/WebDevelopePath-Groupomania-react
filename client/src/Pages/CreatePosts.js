@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
+import Navbar from '../Components/Navbar';
 
 export default function CreatePost() {
   const [title, setTitle] = useState('');
@@ -25,6 +26,7 @@ export default function CreatePost() {
 
   return (
     <>
+      <Navbar />
       <div className='container mx-auto flex justify-center mt-5'>
         <div className='w-4/6'>
           <div className='mt-5 md:mt-0 md:col-span-2'>
