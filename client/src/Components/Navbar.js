@@ -3,6 +3,8 @@ import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon } from '@heroicons/react/outline';
 import Logo from '../assets/images/logo-white.png';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 const navigation = [{ name: 'Dashboard', href: '#', current: true }];
 
@@ -88,15 +90,15 @@ export default function Main() {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
-                        <a
-                          href='/login'
+                        <button
+                          type='button'
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-gray-700'
                           )}
                         >
                           Sign out
-                        </a>
+                        </button>
                       )}
                     </Menu.Item>
                   </Menu.Items>

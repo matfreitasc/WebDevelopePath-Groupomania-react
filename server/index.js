@@ -1,19 +1,48 @@
 const express = require('express');
 const cors = require('cors');
 
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
 const port = 3001;
 const db = require('./models');
 
 app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+app.use(
+  session({
+    key: 'userId',
+    secret: 'keyboardCat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 60 * 60 * 24,
+    },
+  })
+);
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Routers
 const postsRouter = require('./routes/Posts');
 app.use('/api/posts', postsRouter);
 
+// Comments
 const commentsRouter = require('./routes/Comments');
 app.use('/api/comments', commentsRouter);
+
+// Auth
+const usersRouter = require('./routes/Users');
+app.use('/api/auth', usersRouter);
 
 db.sequelize.sync().then(() => {
   console.log('Database & tables created!');

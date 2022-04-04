@@ -1,25 +1,36 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  Axios.defaults.withCredentials = true;
 
-  const sendPost = () => {
-    Axios.post('http://localhost:3000/login', {
+  const onSubmit = () => {
+    Axios.post('http://localhost:3001/api/auth/login', {
       email,
       password,
     })
-      .then((res) => {
-        navigate('/');
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    Axios.get('http://localhost:3001/api/auth/loggedin')
+      .then((res) => {
+        if ((res.data = true)) {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <>
@@ -44,7 +55,7 @@ export default function Login() {
               </a>
             </p>
           </div>
-          <form className='mt-8 space-y-6'>
+          <form className='mt-8 space-y-6' onSubmit={onSubmit}>
             <input type='hidden' name='remember' defaultValue='true' />
             <div className='rounded-md shadow-sm -space-y-px'>
               <div>
@@ -111,7 +122,6 @@ export default function Login() {
               <button
                 type='submit'
                 className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                onClick={sendPost}
               >
                 <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
                   <LockClosedIcon

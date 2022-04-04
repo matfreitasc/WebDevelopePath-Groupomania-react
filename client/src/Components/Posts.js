@@ -20,11 +20,13 @@ function Posts() {
         <div
           key={post.id}
           className='container mx-auto flex justify-center mt-5'
-          onClick={() => {
-            navigate(`/post/${post.id}`);
-          }}
         >
-          <div className='w-4/6'>
+          <div
+            className='w-4/6'
+            onClick={() => {
+              navigate(`/post/${post.id}`);
+            }}
+          >
             <div className='shadow sm:rounded-md sm:overflow-hidden'>
               <div className='px-3 py-2 bg-white space-y-3'>
                 <p className='text-black font-semibold'>{post.title}</p>
