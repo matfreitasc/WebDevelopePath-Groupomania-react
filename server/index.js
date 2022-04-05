@@ -11,16 +11,10 @@ const db = require('./models');
 
 app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  })
-);
 app.use(cookieParser());
-
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cors());
 
 //Routers
 const postsRouter = require('./routes/Posts');
@@ -31,8 +25,8 @@ const commentsRouter = require('./routes/Comments');
 app.use('/api/comments', commentsRouter);
 
 // Auth
-const usersRouter = require('./routes/Users');
-app.use('/api/auth', usersRouter);
+const userRoutes = require('./routes/Users');
+app.use('/api/auth', userRoutes);
 
 db.sequelize.sync().then(() => {
   console.log('Database & tables created!');

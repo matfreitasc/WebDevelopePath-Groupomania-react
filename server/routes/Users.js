@@ -45,13 +45,10 @@ router.post('/login', async (req, res) => {
     if (result) {
       const token = jwt.sign(
         {
-          email: user.email,
+          username: user.username,
           id: user.id,
         },
-        'secret',
-        {
-          expiresIn: '1h',
-        }
+        'importantsecret'
       );
 
       res.status(200).json({
