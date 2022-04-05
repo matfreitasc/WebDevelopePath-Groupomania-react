@@ -4,18 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 
 function Signup() {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  let navigate = useNavigate();
-
-  const onSubmit = () => {
+  const navigate = useNavigate();
+  const onSubmit = (e) => {
+    // prevent default
+    e.preventDefault();
+    // send request to server
     Axios.post('http://localhost:3001/api/auth/register', {
-      name,
       email,
       password,
     })
-      .then((res) => {})
+      .then((res) => {
+        if ((res.status = 200)) {
+          localStorage.setItem('token', res.data.token);
+          navigate('/');
+        }
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -48,23 +53,6 @@ function Signup() {
             <input type='hidden' name='remember' defaultValue='true' />
             <div className='rounded-md shadow-sm -space-y-px'>
               <div>
-                <label htmlFor='name' className='sr-only'>
-                  Name
-                </label>
-                <input
-                  id='name'
-                  name='name'
-                  type='text'
-                  autoComplete='off'
-                  required
-                  className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
-                  placeholder='Enter your name'
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                />
-              </div>
-              <div>
                 <label htmlFor='email-address' className='sr-only'>
                   Email address
                 </label>
@@ -74,7 +62,7 @@ function Signup() {
                   type='email'
                   autoComplete='off'
                   required
-                  className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+                  className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                   placeholder='Email address'
                   onChange={(e) => {
                     setEmail(e.target.value);

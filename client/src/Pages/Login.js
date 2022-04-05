@@ -6,31 +6,26 @@ import Axios from 'axios';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-  Axios.defaults.withCredentials = true;
 
-  const onSubmit = () => {
+  const navigate = useNavigate();
+  const onSubmit = (e) => {
+    // prevent default
+    e.preventDefault();
+    // send request to server
     Axios.post('http://localhost:3001/api/auth/login', {
       email,
       password,
     })
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    Axios.get('http://localhost:3001/api/auth/loggedin')
       .then((res) => {
-        if ((res.data = true)) {
-          // navigate('/');
+        if ((res.status = 200)) {
+          localStorage.setItem('token', res.data.token);
+          navigate('/');
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
 
   return (
     <>

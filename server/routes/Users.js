@@ -1,104 +1,69 @@
 const express = require('express');
 const router = express.Router();
-const { Users } = require('../models');
+const genUsername = require('unique-username-generator');
+
+const { Users } = require('../models/');
+
 const bcrypt = require('bcrypt');
-const { verify } = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
-  bcrypt.hash(password, 10, async (err, hash) => {
-    if (err) {
-      res.status(500).send({
-        error: 'Error creating user',
+  const { email, password } = req.body;
+  const username = genUsername.generateUsername();
+  bcrypt.hash(password, 10).then((hash) => {
+    Users.create({
+      username,
+      email,
+      password: hash,
+    }).then((user) => {
+      res.status(200).json({
+        Success: true,
+        Message: 'User created successfully',
+        User: user,
       });
-    } else {
-      try {
-        const user = await Users.create({
-          name,
-          email,
-          password: hash,
-        });
-        res.status(201).send(user);
-      } catch (e) {
-        res.status(400).send({
-          error: 'Error creating user',
-        });
-      }
-    }
+    });
   });
 });
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  try {
-    const user = await Users.findOne({
-      where: {
-        email: email,
-      },
+
+  const user = await Users.findOne({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    return res.status(404).json({
+      Success: false,
+      Message: 'User not found',
     });
-    if (!user) {
-      res.status(401).send({
-        error: 'Invalid email or password',
+  }
+
+  bcrypt.compare(password, user.password).then((result) => {
+    if (result) {
+      const token = jwt.sign(
+        {
+          email: user.email,
+          id: user.id,
+        },
+        'secret',
+        {
+          expiresIn: '1h',
+        }
+      );
+
+      res.status(200).json({
+        token,
       });
     } else {
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (!validPassword) {
-        res.status(401).send({
-          error: 'Invalid email or password',
-        });
-      } else {
-        const userId = user.id;
-        const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-          expiresIn: 300,
-        });
-
-        res.json(
-          token,
-          {
-            result: res.body,
-          },
-          200
-        );
-      }
+      res.status(401).json({
+        Success: false,
+        Message: 'Password incorrect',
+      });
     }
-  } catch (e) {
-    res.status(500).send({
-      error: 'Error logging in',
-    });
-  }
-});
-
-const verifyJWT = (req, res, next) => {
-  const token = req.headers['x-access-token'];
-  if (!token) {
-    res.status(401).send({
-      error: 'No token provided',
-    });
-  } else {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        res.status(401).send({
-          error: 'Invalid token',
-          auth: false,
-        });
-      } else {
-        req.userId = decoded.id;
-        next();
-      }
-    });
-  }
-};
-
-router.get('/isUserAuthenticated', verifyJWT, (req, res) => {
-  res.send("You're Authenticated");
-});
-
-router.get('/loggedin', (req, res) => {
-  if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
-  } else {
-    res.send({ loggedIn: false });
-  }
+  });
 });
 
 module.exports = router;
