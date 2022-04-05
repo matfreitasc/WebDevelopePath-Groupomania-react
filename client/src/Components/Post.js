@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import Navbar from './Navbar';
 import Axios from 'axios';
 
@@ -9,17 +10,40 @@ function Post() {
   const [post, setPost] = React.useState({});
   const [comments, setComments] = React.useState([]);
   const [comment, setComment] = React.useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/api/posts/${id}`).then((res) => {
       setPost(res.data);
     });
     Axios.get(`http://localhost:3001/api/comments/${id}`).then((res) => {
-      console.log(res.data);
-
       setComments(res.data);
     });
   }, [id]);
+
+  const addComment = (e) => {
+    e.preventDefault();
+    Axios.post(
+      `http://localhost:3001/api/comments`,
+      {
+        commentBody: comment,
+        PostId: id,
+      },
+      {
+        headers: {
+          accessToken: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }
+    ).then((res) => {
+      if (res.data.error) {
+        alert('Please login to add a comment');
+        navigate('/login');
+      } else {
+        setComments([...comments, res.data]);
+        setComment('');
+      }
+    });
+  };
 
   return (
     <div>
@@ -48,17 +72,7 @@ function Post() {
                         setComment(e.target.value);
                       }}
                     />
-                    <button
-                      className='ml-2'
-                      onClick={() => {
-                        Axios.post(`http://localhost:3001/api/comments`, {
-                          commentBody: comment,
-                          PostId: id,
-                        }).then((res) => {
-                          setComments([...comments, res.data]);
-                        });
-                      }}
-                    >
+                    <button className='ml-2' onClick={addComment}>
                       Add
                     </button>
                   </div>
