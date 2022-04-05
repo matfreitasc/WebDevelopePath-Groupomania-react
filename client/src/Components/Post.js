@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useHistory } from 'react-router-dom';
 
 import Navbar from './Navbar';
 import Axios from 'axios';
@@ -22,7 +22,6 @@ function Post() {
   }, [id]);
 
   const addComment = (e) => {
-    e.preventDefault();
     Axios.post(
       `http://localhost:3001/api/comments`,
       {
@@ -31,7 +30,7 @@ function Post() {
       },
       {
         headers: {
-          accessToken: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       }
     ).then((res) => {
@@ -81,7 +80,7 @@ function Post() {
               {comments.map((comments, key) => (
                 <div key={key} className='bg-gray-50 rounded-md p-2'>
                   <a href='#'>
-                    <span className='text-blue-500'>@username</span>
+                    <span className='text-blue-500'>{comments.username}</span>
                   </a>
                   <p>{comments.commentBody}</p>
                 </div>

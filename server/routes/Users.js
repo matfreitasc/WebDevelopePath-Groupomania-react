@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const genUsername = require('unique-username-generator');
 
+const validateToken = require('../middlewares/auth');
+
 const { Users } = require('../models/');
 
 const bcrypt = require('bcrypt');
@@ -46,11 +48,13 @@ router.post('/login', async (req, res) => {
       const token = jwt.sign(
         {
           username: user.username,
-          id: user.id,
+          userId: user.id,
         },
-        'importantsecret'
+        'importantsecret',
+        {
+          expiresIn: '1h',
+        }
       );
-
       res.status(200).json({
         token,
       });
@@ -63,4 +67,11 @@ router.post('/login', async (req, res) => {
   });
 });
 
+router.get('/isAuthenticated', validateToken, (req, res) => {
+  res.status(200).json({
+    Success: true,
+    Message: 'User is authenticated',
+    user: req.user,
+  });
+});
 module.exports = router;

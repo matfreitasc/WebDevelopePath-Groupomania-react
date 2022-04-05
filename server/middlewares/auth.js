@@ -1,18 +1,21 @@
-const { verify } = require('jsonwebtoken');
-
+const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
-  const accessToken = req.header('accessToken').split(' ')[1];
-  console.log(accessToken);
-
-  if (!accessToken) return res.json({ error: 'User not logged in!' });
-
   try {
-    const validToken = verify(accessToken, 'importantsecret');
-
-    if (validToken) {
-      return next();
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'importantsecret');
+    const userId = decodedToken.userId;
+    req.userId = userId;
+    req.username = decodedToken.username;
+    req.auth = { userId };
+    if (req.userId && req.userId !== userId) {
+      throw 'User ID is not valid';
+    } else {
+      next();
     }
-  } catch (err) {
-    return res.json({ error: err });
+  } catch (error) {
+    res.status(403).json({
+      error: 'User not authorized!',
+    });
   }
 };
+//

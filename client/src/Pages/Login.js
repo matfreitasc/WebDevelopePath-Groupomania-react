@@ -1,5 +1,5 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 
@@ -18,7 +18,9 @@ export default function Login() {
     })
       .then((res) => {
         if ((res.status = 200)) {
+          // set token to local storage
           localStorage.setItem('token', res.data.token);
+          // redirect to home page
           navigate('/');
         }
       })

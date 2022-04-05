@@ -89,6 +89,9 @@ export default function Main() {
                     <Menu.Item>
                       {({ active }) => (
                         <a
+                          onClick={() => {
+                            localStorage.removeItem('token');
+                          }}
                           href='/login'
                           className={classNames(
                             active ? 'bg-gray-100' : '',
