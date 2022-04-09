@@ -12,10 +12,17 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 
   Posts.associate = function (models) {
     Posts.hasMany(models.Comments, {
+      onDelete: 'CASCADE',
+    });
+    Posts.hasMany(models.Likes, {
       onDelete: 'CASCADE',
     });
   };

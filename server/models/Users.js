@@ -30,10 +30,10 @@ module.exports = function (sequelize, DataTypes) {
     },
   });
 
-  // Users.associate = function (models) {
-  //   Users.hasMany(models.Posts, {
-  //     onDelete: 'CASCADE',
-  //   });
-  // };
+  Users.associate = function (models) {
+    Users.hasMany(models.Likes, {
+      onDelete: 'CASCADE',
+    });
+  };
   return Users;
 };

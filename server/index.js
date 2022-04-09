@@ -4,29 +4,17 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-require('dotenv').config();
-
-const port = process.env.PORT || 3001;
 const db = require('./models');
 
+const port = process.env.PORT || 3001;
+
+require('dotenv').config();
 app = express();
-app.use(express.json());
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
-
-//Routers
-const postsRouter = require('./routes/Posts');
-app.use('/api/posts', postsRouter);
-
-// Comments
-const commentsRouter = require('./routes/Comments');
-app.use('/api/comments', commentsRouter);
-
-// Auth
-const userRoutes = require('./routes/Users');
-app.use('/api/auth', userRoutes);
 
 db.sequelize.sync().then(() => {
   console.log('Database & tables created!');
@@ -34,3 +22,14 @@ db.sequelize.sync().then(() => {
     console.log('Server is running on port ' + port);
   });
 });
+
+app.use(express.json());
+
+//Posts
+app.use('/api/posts', require('./routes/post'));
+// Comments
+app.use('/api/comments', require('./routes/Comments'));
+// Auth
+app.use('/api/auth', require('./routes/user'));
+// Likes
+app.use('/api/likes', require('./routes/likes'));

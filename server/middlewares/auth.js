@@ -4,8 +4,9 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'importantsecret');
     const userId = decodedToken.userId;
+    const username = decodedToken.username;
     req.userId = userId;
-    req.username = decodedToken.username;
+    req.username = username;
     req.auth = { userId };
     if (req.userId && req.userId !== userId) {
       throw 'User ID is not valid';
@@ -18,4 +19,3 @@ module.exports = (req, res, next) => {
     });
   }
 };
-//

@@ -1,15 +1,11 @@
-const express = require('express');
-const router = express.Router();
 const genUsername = require('unique-username-generator');
-
-const validateToken = require('../middlewares/auth');
 
 const { Users } = require('../models/');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-router.post('/register', async (req, res) => {
+exports.register = async (req, res, next) => {
   const { email, password } = req.body;
   const username = genUsername.generateUsername();
   bcrypt.hash(password, 10).then((hash) => {
@@ -25,9 +21,9 @@ router.post('/register', async (req, res) => {
       });
     });
   });
-});
+};
 
-router.post('/login', async (req, res) => {
+exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await Users.findOne({
@@ -42,7 +38,6 @@ router.post('/login', async (req, res) => {
       Message: 'User not found',
     });
   }
-
   bcrypt.compare(password, user.password).then((result) => {
     if (result) {
       const token = jwt.sign(
@@ -55,8 +50,11 @@ router.post('/login', async (req, res) => {
           expiresIn: '1h',
         }
       );
+      res.cookie('token', token);
       res.status(200).json({
         token,
+        userId: user.id,
+        username: user.username,
       });
     } else {
       res.status(401).json({
@@ -65,13 +63,13 @@ router.post('/login', async (req, res) => {
       });
     }
   });
-});
+};
 
-router.get('/isAuthenticated', validateToken, (req, res) => {
+exports.validate = (req, res, next) => {
   res.status(200).json({
     Success: true,
     Message: 'User is authenticated',
-    user: req.user,
+    user: req.username,
+    id: req.userId,
   });
-});
-module.exports = router;
+};

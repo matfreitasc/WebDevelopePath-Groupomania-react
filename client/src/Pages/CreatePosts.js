@@ -1,28 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
-import Navbar from '../Components/Navbar';
+import { axios } from '../middleware/axios/axios';
+import Navbar from '../Layouts/navbar/Navbar';
 
 export default function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const username = 'test';
+  const [userId, setUserId] = useState('');
+  const [username, setUsername] = useState('');
 
   let navigate = useNavigate();
 
   const sendPost = () => {
-    Axios.post('http://localhost:3001/api/posts', {
-      title,
-      content,
-      username,
-    })
-      .then((res) => {
-        navigate('/');
+    axios
+      .post('/posts', {
+        title,
+        content,
+        username,
+        userId,
       })
-      .catch((err) => {
-        console.log(err);
+      .then((res) => {
+        if (res.data.errors) {
+          alert(res.data.errors);
+        } else {
+          navigate('/');
+        }
       });
   };
+  useEffect(() => {
+    axios.get('/auth/').then((res) => {
+      setUserId(res.data.id);
+      setUsername(res.data.user);
+    });
+  }, []);
 
   return (
     <>
