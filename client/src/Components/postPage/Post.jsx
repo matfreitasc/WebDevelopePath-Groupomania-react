@@ -2,8 +2,8 @@ import React from 'react';
 import { useEffect, Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navbar from '../Layouts/navbar/Navbar';
-import { axios } from '../middleware/axios/axios';
+import Navbar from '../../Layouts/navbar/Navbar';
+import { axios } from '../../middleware/axios/axios';
 
 function Post() {
   const { id } = useParams();

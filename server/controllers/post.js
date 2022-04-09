@@ -15,9 +15,15 @@ exports.getOne = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  const post = req.body;
-  await Posts.create(post);
-  res.status(200).json(post);
+  const url = req.protocol + '://' + req.get('host');
+  const body = req.body;
+  const post = await Posts.create({
+    ...body,
+  });
+  res.status(201).json({
+    message: 'Post created!',
+    post,
+  });
 };
 
 exports.deletePost = async (req, res) => {

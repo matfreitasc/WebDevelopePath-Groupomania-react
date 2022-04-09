@@ -1,9 +1,9 @@
 import React from 'react';
-import Posts from '../Components/Posts';
+import Posts from '../../Components/Posts';
 
 function Main() {
   return (
-    <div>
+    <div className=' min-w-[350px] overflow-x-hidden'>
       <Posts />
     </div>
   );
