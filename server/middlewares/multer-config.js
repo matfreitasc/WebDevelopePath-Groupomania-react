@@ -4,6 +4,7 @@ const MIME_TYPE_MAP = {
   'image/png': 'png',
   'image/jpeg': 'jpg',
   'image/jpg': 'jpg',
+  'image/gif': 'gif',
 };
 
 const storage = multer.diskStorage({
@@ -11,7 +12,7 @@ const storage = multer.diskStorage({
     callback(null, 'images');
   },
   filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('-');
+    const name = file.originalname.split('.').join('-');
     const extension = MIME_TYPE_MAP[file.mimetype];
     callback(null, name + '-' + Date.now() + '.' + extension);
   },

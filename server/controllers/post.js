@@ -17,13 +17,26 @@ exports.getOne = async (req, res) => {
 exports.create = async (req, res) => {
   const url = req.protocol + '://' + req.get('host');
   const body = req.body;
-  const post = await Posts.create({
-    ...body,
-  });
-  res.status(201).json({
-    message: 'Post created!',
-    post,
-  });
+  if (req.file === undefined) {
+    const post = await Posts.create({
+      ...body,
+    });
+    console.log(req.file);
+    res.status(201).json({
+      message: 'Post created!',
+      post,
+    });
+  } else {
+    const post = await Posts.create({
+      ...body,
+      imageUrl: url + '/images/' + req.file.filename,
+    });
+    console.log(post);
+    res.status(201).json({
+      message: 'Post created!',
+      post,
+    });
+  }
 };
 
 exports.deletePost = async (req, res) => {

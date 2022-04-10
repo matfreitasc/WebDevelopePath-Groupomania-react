@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -24,6 +25,7 @@ db.sequelize.sync().then(() => {
 });
 
 app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Posts
 app.use('/api/posts', require('./routes/post'));

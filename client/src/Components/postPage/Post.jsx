@@ -1,9 +1,9 @@
 import React from 'react';
 import { useEffect, Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from '../../Layouts/navbar/Navbar';
-import { axios } from '../../middleware/axios/axios';
+import { axios } from '../../helpers/axios';
 
 function Post() {
   const { id } = useParams();
@@ -11,7 +11,6 @@ function Post() {
   const [comments, setComments] = React.useState([]);
   const [comment, setComment] = React.useState('');
   const [userId, setUserId] = React.useState('');
-  const navigate = useNavigate();
 
   const deleteComment = async (commentId) => {
     await axios.delete(`/comments/${commentId}`).then((res) => {
@@ -46,7 +45,7 @@ function Post() {
         PostId: id,
       })
       .then((res) => {
-        if (userId == '' || userId == null) {
+        if (userId === '' || userId == null) {
           console.log(res.data.error);
         } else {
           setComments([...comments, res.data]);

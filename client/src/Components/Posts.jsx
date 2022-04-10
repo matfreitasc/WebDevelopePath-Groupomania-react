@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import Navbar from '../Layouts/navbar/Navbar';
-import { axios } from '../middleware/axios/axios';
+import { axios } from '../helpers/axios';
 
 function Posts() {
   const [posts, setPosts] = React.useState([]);
@@ -91,6 +91,18 @@ function Posts() {
                 >
                   {post.content}
                 </p>
+
+                {post.imageUrl ? (
+                  <img
+                    src={post.imageUrl}
+                    alt='post'
+                    className='w-full h-auto object-cover object-center rounded-md shadow-md'
+                    onClick={() => {
+                      navigate(`/post/${post.id}`);
+                    }}
+                  />
+                ) : null}
+
                 <div className='flex flex-row'>
                   <div className='ml-2 mr-2'>0 {post.likes}</div>
                   <div onClick={() => {}}>
