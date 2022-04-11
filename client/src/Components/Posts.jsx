@@ -139,7 +139,10 @@ function Posts() {
                   </div>
                   <div className='ml-2 mr-2'>0 {post.dislike}</div>
                   <p className='ml-auto'>
-                    Created by: <a href='#'>{post.username}</a>
+                    Created by:{' '}
+                    <a onClick={navigate(`/${post.username}`)}>
+                      {post.username}
+                    </a>
                   </p>
                 </div>
               </div>
