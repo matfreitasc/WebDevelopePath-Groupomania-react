@@ -5,8 +5,8 @@ import Navbar from '../Layouts/navbar/Navbar';
 import { axios } from '../helpers/axios';
 
 function Posts() {
-  const [posts, setPosts] = React.useState([]);
-  const [userId, setUserId] = React.useState('');
+  const [posts, setPosts] = useState([]);
+  const [userId, setUserId] = useState('');
   let navigate = useNavigate();
 
   const deletePost = async (postId) => {
