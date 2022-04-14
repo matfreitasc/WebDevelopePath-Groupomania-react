@@ -13,7 +13,7 @@ function classNames(...classes) {
 export default function Main() {
   const [openModal, setOpenModal] = useState(false);
   return (
-    <Disclosure as='nav' className='bg-gray-800'>
+    <Disclosure as='nav' className='bg-gray-800 z-10'>
       <>
         <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
           <div className='relative flex items-center justify-between h-16'>
@@ -34,9 +34,9 @@ export default function Main() {
 
               <Modal openModal={openModal} setOpenModal={setOpenModal} />
               {/* Profile dropdown */}
-              <Menu as='div' className='ml-3 relative z-10'>
+              <Menu as='div' className='ml-3 relative z-20'>
                 <div>
-                  <Menu.Button className='bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>
+                  <Menu.Button className='bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white z-20'>
                     <span className='sr-only'>Open user menu</span>
                     <img
                       className='h-8 w-8 rounded-full'
@@ -54,7 +54,7 @@ export default function Main() {
                   leaveFrom='transform opacity-100 scale-100'
                   leaveTo='transform opacity-0 scale-95'
                 >
-                  <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                  <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20'>
                     <Menu.Item>
                       {({ active }) => (
                         <a
