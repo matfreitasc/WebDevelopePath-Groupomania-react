@@ -1,29 +1,21 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
+import { axios } from '../../../helpers/axios';
 
 function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const onSubmit = (e) => {
-    // prevent default
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // send request to server
-    Axios.post('http://localhost:3001/api/auth/register', {
-      email,
-      password,
-    })
-      .then((res) => {
-        if ((res.status = 200)) {
-          localStorage.setItem('token', res.data.token);
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const response = await axios.post('/auth/signup', { email, password });
+      localStorage.setItem('token', response.data.token);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -49,7 +41,7 @@ function Signup() {
               </a>
             </p>
           </div>
-          <form className='mt-8 space-y-6' onSubmit={onSubmit}>
+          <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
             <input type='hidden' name='remember' defaultValue='true' />
             <div className='rounded-md shadow-sm -space-y-px'>
               <div>
