@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "SuperStrongP@ssword",
+    "password": "root_password",
     "database": "database_development",
-    "host": "127.0.0.1",
+    "host": "192.168.1.25",
     "dialect": "mysql"
   },
   "test": {
