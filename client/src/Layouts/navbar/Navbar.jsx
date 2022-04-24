@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Modal from '../../Components/modal/Modal';
 import Logo from '../../assets/images/logo-white.png';
+import { axios } from '../../helpers/axios';
+import { useNavigate } from 'react-router-dom';
 
 const navigation = [{ name: 'Dashboard', href: '#', current: true }];
 
@@ -11,7 +13,15 @@ function classNames(...classes) {
 }
 
 export default function Main() {
+  let navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    axios.get('/auth').then((res) => {
+      setUserId(res.data.id);
+    });
+  }, []);
   return (
     <Disclosure as='nav' className='bg-gray-800 z-10'>
       <>
@@ -58,7 +68,9 @@ export default function Main() {
                     <Menu.Item>
                       {({ active }) => (
                         <a
-                          href='#'
+                          onClick={() => {
+                            navigate(`/post/${userId}`);
+                          }}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-gray-700'
