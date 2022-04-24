@@ -1,9 +1,11 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import AuthContext from '../../../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 
 export default function Login() {
+  const { setAuth } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

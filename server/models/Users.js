@@ -28,6 +28,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
+    refreshToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   Users.associate = function (models) {

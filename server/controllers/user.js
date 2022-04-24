@@ -1,6 +1,7 @@
 const genUsername = require('unique-username-generator');
 
 const { Users } = require('../models/');
+require('dotenv').config();
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -8,22 +9,44 @@ const jwt = require('jsonwebtoken');
 exports.register = async (req, res, next) => {
   const { email, password } = req.body;
   const username = genUsername.generateUsername();
-  bcrypt.hash(password, 10).then((hash) => {
-    Users.create({
-      username,
-      email,
-      password: hash,
-    }).then((user) => {
-      res.status(200).json({
-        Success: true,
-        Message: 'User created successfully',
-        User: user,
-      });
+  if (!email || !password) {
+    return res.status(400).json({
+      message: 'Please provide email and password',
     });
+  }
+  const user = await Users.findOne({
+    where: {
+      email,
+    },
   });
+  if (user) {
+    return res.status(409).json({
+      message: 'Email already exists',
+    });
+  }
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await Users.create({
+      email,
+      password: hashedPassword,
+      username,
+    });
+    res.status(201).json({
+      message: 'User created successfully',
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
-exports.login = async (req, res, next) => {
+exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await Users.findOne({
@@ -40,17 +63,35 @@ exports.login = async (req, res, next) => {
   }
   bcrypt.compare(password, user.password).then((result) => {
     if (result) {
-      const token = jwt.sign(
+      const acessToken = jwt.sign(
         {
           username: user.username,
           userId: user.id,
         },
-        'importantsecret',
+        process.env.ACCESS_TOKEN,
         {
-          expiresIn: '1h',
+          expiresIn: '15m',
         }
       );
-      res.cookie('token', token);
+      const refeshToken = jwt.sign(
+        {
+          username: user.username,
+          userId: user.id,
+        },
+        process.env.REFRESH_TOKEN,
+        {
+          expiresIn: '1d',
+        }
+      );
+      // Save refresh token in DB
+      user.update({
+        refreshToken: refeshToken,
+      });
+
+      res.cookie('token', refreshToken, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 1000,
+      });
       res.status(200).json({
         token,
         userId: user.id,
@@ -59,7 +100,7 @@ exports.login = async (req, res, next) => {
     } else {
       res.status(401).json({
         Success: false,
-        Message: 'Password incorrect',
+        Message: 'Email and Password incorrect',
       });
     }
   });
