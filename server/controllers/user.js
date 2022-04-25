@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
           expiresIn: '15m',
         }
       );
-      const refeshToken = jwt.sign(
+      const refreshToken = jwt.sign(
         {
           username: user.username,
           userId: user.id,
@@ -85,22 +85,24 @@ exports.login = async (req, res) => {
       );
       // Save refresh token in DB
       user.update({
-        refreshToken: refeshToken,
+        refreshToken: refreshToken,
       });
 
-      res.cookie('token', refreshToken, {
+      res.cookie('jwt', refreshToken, {
         httpOnly: true,
+        sameSite: 'None',
+        secure: true,
         maxAge: 1000 * 60 * 60 * 1000,
       });
       res.status(200).json({
-        token,
+        acessToken,
         userId: user.id,
         username: user.username,
       });
     } else {
       res.status(401).json({
         Success: false,
-        Message: 'Email and Password incorrect',
+        Message: 'Email or Password incorrect',
       });
     }
   });

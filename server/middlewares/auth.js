@@ -13,13 +13,15 @@ module.exports = (req, res, next) => {
       message: 'Token is invalid or expired',
     });
   }
-  jwt.verify(token, process.env.ACESS_TOKEN, (err, decoded) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
     if (err) {
       return res.status(403).json({
         message: 'Token is invalid or expired',
       });
     }
     req.userId = decoded.userId;
+    req.username = decoded.username;
+
     next();
   });
 };
