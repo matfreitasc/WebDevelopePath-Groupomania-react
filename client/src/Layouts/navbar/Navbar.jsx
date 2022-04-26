@@ -3,7 +3,6 @@ import { Fragment, useState, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Modal from '../../Components/modal/Modal';
 import Logo from '../../assets/images/logo-white.png';
-import { axios } from '../../helpers/axios';
 import { useNavigate } from 'react-router-dom';
 
 const navigation = [{ name: 'Dashboard', href: '#', current: true }];
@@ -17,11 +16,6 @@ export default function Main() {
   const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState('');
 
-  useEffect(() => {
-    axios.get('/auth').then((res) => {
-      setUserId(res.data.id);
-    });
-  }, []);
   return (
     <Disclosure as='nav' className='bg-gray-800 z-10'>
       <>

@@ -1,34 +1,44 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useState, useContext } from 'react';
-import AuthContext from '../../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
+import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from '../../../api/axios';
+import useAuth from '../../../hooks/useAuth';
 
 export default function Login() {
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigate = useNavigate();
-  const onSubmit = (e) => {
-    // prevent default
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // send request to server
-    Axios.post('http://localhost:3001/api/auth/login', {
-      email,
-      password,
-    })
-      .then((res) => {
-        if ((res.status = 200)) {
-          // set token to local storage
-          localStorage.setItem('token', res.data.token);
-          // redirect to home page
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const res = await axios.post('/auth/login', {
+        email,
+        password,
       });
+      const accessToken = res.data.accessToken;
+      const username = res.data.username;
+      const userId = res.data.userId;
+      console.log(res.data);
+      console.log('AccessToken', accessToken);
+      setAuth({ accessToken, username, userId, email });
+      console.log(auth);
+      setEmail('');
+      setPassword('');
+      navigate(from, { replace: true });
+    } catch (error) {
+      if (!error || !error.response) {
+        console.log('Error: ', error.message);
+      } else if (error.response.status === 400) {
+        console.log('Missing email or password');
+      } else {
+        console.log('Error: ', error.response.data);
+      }
+    }
   };
 
   return (
@@ -54,7 +64,7 @@ export default function Login() {
               </a>
             </p>
           </div>
-          <form className='mt-8 space-y-6' onSubmit={onSubmit}>
+          <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
             <input type='hidden' name='remember' defaultValue='true' />
             <div className='rounded-md shadow-sm -space-y-px'>
               <div>

@@ -1,7 +1,7 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { axios } from '../../../helpers/axios';
+import axios from '../../../api/axios';
 
 function Signup() {
   const [email, setEmail] = useState('');

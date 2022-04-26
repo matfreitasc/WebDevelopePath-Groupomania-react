@@ -1,8 +1,12 @@
 import { Fragment, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { axios } from '../../helpers/axios';
+import useAuth from '../../hooks/useAuth';
+
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 export default function Modal({ openModal, setOpenModal }) {
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useAuth();
   const open = openModal;
   const setOpen = setOpenModal;
   const [title, setTitle] = useState('');
@@ -17,6 +21,14 @@ export default function Modal({ openModal, setOpenModal }) {
     setImageName(event.target.files[0].name);
   };
 
+  // get Auth Data and set userId and username
+  useEffect(() => {
+    if (auth) {
+      setUserId(auth.userId);
+      setUsername(auth.username);
+    }
+  }, [auth]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
@@ -25,24 +37,23 @@ export default function Modal({ openModal, setOpenModal }) {
     formData.append('image', imageUpload);
     formData.append('userId', userId);
     formData.append('username', username);
-    await axios
-      .post('/posts/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+    await axiosPrivate
+      .post(
+        '/posts/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         },
-      })
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setOpen(false);
-        window.location.reload();
       });
   };
-
-  useEffect(() => {
-    axios.get('/auth/').then((res) => {
-      setUserId(res.data.id);
-      setUsername(res.data.user);
-    });
-  }, []);
 
   return (
     <>

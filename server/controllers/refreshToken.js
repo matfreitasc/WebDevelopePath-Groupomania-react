@@ -22,7 +22,7 @@ exports.refreshToken = (req, res) => {
         message: 'Token is invalid or expired',
       });
     }
-
+    console.log(decoded);
     // find user by id
     Users.findOne({
       where: {
