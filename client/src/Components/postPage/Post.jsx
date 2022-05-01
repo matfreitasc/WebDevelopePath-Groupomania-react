@@ -1,11 +1,16 @@
 import React from 'react';
 import { useEffect, Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Navbar from '../../Layouts/navbar/Navbar';
-import { axios } from '../../helpers/axios';
+import useAuth from '../../hooks/useAuth';
 
 function Post() {
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { auth } = useAuth();
   const { id } = useParams();
   const [post, setPost] = React.useState({});
   const [comments, setComments] = React.useState([]);
@@ -13,41 +18,80 @@ function Post() {
   const [userId, setUserId] = React.useState('');
 
   const deleteComment = async (commentId) => {
-    await axios.delete(`/comments/${commentId}`).then((res) => {
+    await axiosPrivate.delete(`/comments/${commentId}`).then((res) => {
       setComments(comments.filter((comment) => comment.id !== commentId));
     });
   };
 
   useEffect(() => {
-    axios.get(`/posts/${id}`).then((res) => {
-      setPost(res.data);
-    });
-    axios.get(`/comments/${id}`).then((res) => {
-      setComments(res.data);
-    });
-  }, [id]);
+    console.log(auth);
+    if (auth) {
+      setUserId(auth.userId);
+    }
+  }, [auth]);
 
   useEffect(() => {
-    axios
-      .get('/auth')
-      .then((res) => {
-        setUserId(res.data.id);
-      })
-      .catch((err) => {
-        alert('Please login to add a comment');
-      });
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchPost = async () => {
+      try {
+        const response = await axiosPrivate.get(`/posts/${id}`, {
+          signal: controller.signal,
+        });
+        console.log(response.data);
+        isMounted && setPost(response.data);
+      } catch (err) {
+        console.error(err);
+        navigate('/login', { state: { from: location }, replace: true });
+      }
+    };
+    fetchPost();
+    return () => {
+      controller.abort();
+      isMounted = false;
+    };
+  }, []);
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchComments = async () => {
+      try {
+        const response = await axiosPrivate.get(`/comments/${id}`, {
+          signal: controller.signal,
+        });
+        console.log('Comments', response.data);
+        isMounted && setComments(response.data);
+      } catch (err) {
+        console.error(err);
+        navigate('/login', { state: { from: location }, replace: true });
+      }
+    };
+    fetchComments();
+    return () => {
+      controller.abort();
+      isMounted = false;
+    };
   }, []);
 
   const addComment = () => {
-    axios
-      .post(`/comments`, {
-        commentBody: comment,
-        PostId: id,
-      })
+    axiosPrivate
+      .post(
+        `/comments`,
+        {
+          commentBody: comment,
+          PostId: id,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (userId === '' || userId == null) {
           console.log(res.data.error);
         } else {
+          console.log(res.data);
           setComments([...comments, res.data]);
           setComment('');
         }

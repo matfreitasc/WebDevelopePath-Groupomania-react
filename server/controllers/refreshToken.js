@@ -13,7 +13,7 @@ exports.refreshToken = (req, res) => {
   console.log(cookies.jwt);
   // find user by token in db
 
-  const refreshToken = cookies.jwt;
+  const cookie = cookies.jwt;
 
   // find user in db by token and check if token is valid
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, decoded) => {
@@ -22,11 +22,11 @@ exports.refreshToken = (req, res) => {
         message: 'Token is invalid or expired',
       });
     }
-
+    console.log(decoded);
     // find user by id
     Users.findOne({
       where: {
-        id: decoded.userId,
+        userId: decoded.userId,
       },
     }).then((user) => {
       if (!user) {

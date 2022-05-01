@@ -1,14 +1,7 @@
-import { axios } from '../../helpers/axios';
 import { React, useEffect, useState, Fragment } from 'react';
 
 export default function Profile() {
   const [userId, setUserId] = useState('');
-
-  useEffect(() => {
-    axios.get('/auth').then((res) => {
-      setUserId(res.data.id);
-    });
-  }, []);
 
   return (
     <>

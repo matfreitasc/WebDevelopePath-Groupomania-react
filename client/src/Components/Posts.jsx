@@ -1,26 +1,54 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import Navbar from '../Layouts/navbar/Navbar';
-import { axios } from '../helpers/axios';
+import { axiosPrivate } from '../api/axios';
+import useAuth from '../hooks/useAuth';
 
 function Posts() {
+  const { auth } = useAuth();
   const [posts, setPosts] = useState([]);
   const [userId, setUserId] = useState('');
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const deletePost = async (postId) => {
-    await axios.delete(`/posts/${postId}`);
+    await axiosPrivate.delete(`/posts/${postId}`);
     setPosts(posts.filter((post) => post.id !== postId));
   };
+  useEffect(() => {
+    if (auth) {
+      setUserId(auth.userId);
+    }
+  }, [auth]);
 
   useEffect(() => {
-    axios.get('/posts').then((res) => {
+    axiosPrivate.get('/posts').then((res) => {
       setPosts(res.data);
     });
-    axios.get('/auth').then((res) => {
-      setUserId(res.data.id);
-    });
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchPost = async () => {
+      try {
+        const response = await axiosPrivate.get(`/posts/`, {
+          signal: controller.signal,
+        });
+        console.log(response.data);
+        isMounted && setPosts(response.data);
+      } catch (err) {
+        console.error(err);
+        navigate('/login', { state: { from: location }, replace: true });
+      }
+    };
+    fetchPost();
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   return (
@@ -149,6 +177,6 @@ function Posts() {
       ))}
     </div>
   );
-}
+} //end of function
 
 export default Posts;

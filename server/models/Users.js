@@ -38,6 +38,10 @@ module.exports = function (sequelize, DataTypes) {
     Users.hasMany(models.Likes, {
       onDelete: 'CASCADE',
     });
+    Users.belongsToMany(models.Roles, {
+      onDelete: 'CASCADE',
+    });
   };
+
   return Users;
 };
