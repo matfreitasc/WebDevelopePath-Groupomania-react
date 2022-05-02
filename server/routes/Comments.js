@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Comments } = require('../models');
-const auth = require('../middlewares/auth');
+const auth = require('../middlewares/verifyJWT');
 
 router.get('/:postId', async (req, res) => {
   const postId = req.params.postId;

@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const Users = sequelize.define('Users', {
+  const User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -11,6 +11,7 @@ module.exports = function (sequelize, DataTypes) {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -20,7 +21,11 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    user_image: {
+    profile_image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    profile_banner: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -34,14 +39,15 @@ module.exports = function (sequelize, DataTypes) {
     },
   });
 
-  Users.associate = function (models) {
-    Users.hasMany(models.Likes, {
+  User.associate = function (models) {
+    User.hasMany(models.Likes, {
       onDelete: 'CASCADE',
     });
-    Users.belongsToMany(models.Roles, {
-      onDelete: 'CASCADE',
+    User.hasOne(models.Role, {
+      foreignKey: 'userId',
+      as: 'role',
     });
   };
 
-  return Users;
+  return User;
 };

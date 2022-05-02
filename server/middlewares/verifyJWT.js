@@ -8,20 +8,14 @@ module.exports = (req, res, next) => {
     });
   }
   const token = authHeader.split(' ')[1];
-  if (!token || token === '') {
-    return res.status(401).json({
-      message: 'Token is invalid or expired',
-    });
-  }
-  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({
-        message: 'Token is invalid or expired',
-      });
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
     req.userId = decoded.userId;
     req.username = decoded.username;
-
     next();
-  });
+  } catch (err) {
+    return res.status(401).json({
+      message: 'Invalid token',
+    });
+  }
 };
