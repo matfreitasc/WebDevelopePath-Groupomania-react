@@ -1,9 +1,11 @@
 import React from 'react';
 import Posts from '../../Components/Posts';
+import Navbar from '../../Layouts/navbar/Navbar';
 
 function Main() {
   return (
-    <div className=' min-w-[350px] overflow-x-hidden'>
+    <div>
+      <Navbar />
       <Posts />
     </div>
   );

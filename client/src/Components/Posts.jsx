@@ -50,8 +50,7 @@ function Posts() {
   }, []);
 
   return (
-    <div>
-      <Navbar />
+    <div className='min-w-[350px] overflow-x-hidden'>
       {posts.reverse().map((post) => (
         <div
           key={post.id}
