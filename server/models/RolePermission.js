@@ -2,7 +2,7 @@ module.exports = function (sequelize, DataTypes) {
   const RolePermission = sequelize.define('RolePermission', {
     Role_Id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      defaultValue: 2001,
     },
     Perm_Id: {
       type: DataTypes.INTEGER,

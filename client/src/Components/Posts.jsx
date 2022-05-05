@@ -37,10 +37,8 @@ function Posts() {
         const response = await axiosPrivate.get(`/posts/`, {
           signal: controller.signal,
         });
-        console.log(response.data);
         isMounted && setPosts(response.data);
       } catch (err) {
-        console.error(err);
         navigate('/login', { state: { from: location }, replace: true });
       }
     };

@@ -31,6 +31,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     darkMode: {
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
       allowNull: true,
     },
     refreshToken: {

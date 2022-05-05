@@ -24,7 +24,6 @@ function Post() {
   };
 
   useEffect(() => {
-    console.log(auth);
     if (auth) {
       setUserId(auth.userId);
     }
@@ -39,10 +38,8 @@ function Post() {
         const response = await axiosPrivate.get(`/posts/${id}`, {
           signal: controller.signal,
         });
-        console.log(response.data);
         isMounted && setPost(response.data);
       } catch (err) {
-        console.error(err);
         navigate('/login', { state: { from: location }, replace: true });
       }
     };
@@ -61,10 +58,8 @@ function Post() {
         const response = await axiosPrivate.get(`/comments/${id}`, {
           signal: controller.signal,
         });
-        console.log('Comments', response.data);
         isMounted && setComments(response.data);
       } catch (err) {
-        console.error(err);
         navigate('/login', { state: { from: location }, replace: true });
       }
     };
@@ -89,9 +84,7 @@ function Post() {
       )
       .then((res) => {
         if (userId === '' || userId == null) {
-          console.log(res.data.error);
         } else {
-          console.log(res.data);
           setComments([...comments, res.data]);
           setComment('');
         }

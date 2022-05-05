@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { useNavigate } from 'react-router-dom';
+import useRefreshToken from '../../hooks/useRefreshToken';
 import Modal from '../../Components/modal/Modal';
 import Logo from '../../assets/images/logo-white.png';
-import { useNavigate } from 'react-router-dom';
+import useLogout from '../../hooks/useLogout';
 
 const navigation = [{ name: 'Dashboard', href: '#', current: true }];
 
@@ -14,7 +16,13 @@ function classNames(...classes) {
 export default function Main() {
   let navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
-  const [userId, setUserId] = useState('');
+  const refresh = useRefreshToken();
+  const logout = useLogout();
+
+  const signOut = async () => {
+    await logout();
+    navigate('/login');
+  };
 
   return (
     <Disclosure as='nav' className='bg-gray-800 z-10'>
@@ -29,6 +37,12 @@ export default function Main() {
               </div>
             </div>
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+              <button
+                className='mr-2 bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium  focus:outline-none focus:ring-2 focus:ring-outline-white'
+                onClick={() => refresh()}
+              >
+                Refresh Token
+              </button>
               <button
                 className='mr-2 bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium  focus:outline-none focus:ring-2 focus:ring-outline-white'
                 onClick={() => setOpenModal(true)}
@@ -62,9 +76,7 @@ export default function Main() {
                     <Menu.Item>
                       {({ active }) => (
                         <a
-                          onClick={() => {
-                            navigate(`/post/${userId}`);
-                          }}
+                          onClick={() => {}}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-gray-700'
@@ -90,10 +102,7 @@ export default function Main() {
                     <Menu.Item>
                       {({ active }) => (
                         <a
-                          onClick={() => {
-                            localStorage.removeItem('token');
-                          }}
-                          href='/login'
+                          onClick={() => signOut()}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-gray-700 w-full'

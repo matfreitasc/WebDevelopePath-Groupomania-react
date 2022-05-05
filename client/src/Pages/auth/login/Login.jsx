@@ -1,11 +1,11 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../../api/axios';
 import useAuth from '../../../hooks/useAuth';
 
 export default function Login() {
-  const { auth, setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
@@ -16,17 +16,22 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/auth/login', {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        '/auth/login',
+        {
+          email,
+          password,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        }
+      );
       const accessToken = res.data.accessToken;
       const username = res.data.username;
       const userId = res.data.userId;
-      console.log(res.data);
-      console.log('AccessToken', accessToken);
-      setAuth({ accessToken, username, userId, email });
-      console.log(auth);
+      const userRole = res.data.role;
+      setAuth({ accessToken, username, userId, email, userRole });
       setEmail('');
       setPassword('');
       navigate(from, { replace: true });
@@ -40,6 +45,12 @@ export default function Login() {
       }
     }
   };
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+  useEffect(() => {
+    localStorage.setItem('persist', persist);
+  }, [persist]);
 
   return (
     <>
@@ -107,6 +118,8 @@ export default function Login() {
                   id='remember-me'
                   name='remember-me'
                   type='checkbox'
+                  onChange={togglePersist}
+                  checked={persist}
                   className='h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded'
                 />
                 <label

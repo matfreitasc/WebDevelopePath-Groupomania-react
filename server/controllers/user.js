@@ -38,6 +38,7 @@ exports.register = async (req, res) => {
         id: newUser.id,
         email: newUser.email,
         username: newUser.username,
+        role: newUser.roleId,
       },
     });
   } catch (err) {
@@ -64,14 +65,14 @@ exports.login = async (req, res) => {
   }
   bcrypt.compare(password, user.password).then((result) => {
     if (result) {
-      const acessToken = jwt.sign(
+      const accessToken = jwt.sign(
         {
           userId: user.id,
           username: user.username,
         },
         process.env.ACCESS_TOKEN,
         {
-          expiresIn: '1m',
+          expiresIn: '15m',
         }
       );
       const refreshToken = jwt.sign(
@@ -96,9 +97,10 @@ exports.login = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
       });
       res.status(200).json({
-        acessToken,
-        // userId: user.id,
-        // username: user.username,
+        accessToken,
+        userId: user.id,
+        username: user.username,
+        role: user.roleId,
       });
     } else {
       res.status(401).json({
@@ -111,28 +113,34 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) {
-    return res.status(401).json({
+  const refreshToken = cookies.jwt;
+  if (!refreshToken) {
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      sameSite: 'None',
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    return res.status(204).json({
       Success: false,
-      Message: 'No token provided',
+      Message: 'Cookie Cleared',
     });
   }
-  const refreshToken = cookies.jwt;
   const user = await User.findOne({
     where: {
       refreshToken,
     },
   });
-  if (!user) {
-    return res.status(404).json({
-      Success: false,
-      Message: 'User not found',
-    });
-  }
   user.update({
     refreshToken: null,
   });
-  res.status(200).json({
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+  res.status(204).json({
     Success: true,
     Message: 'Logout successful',
   });
@@ -140,6 +148,7 @@ exports.logout = async (req, res) => {
 
 exports.refreshToken = async (req, res) => {
   const cookies = req.cookies;
+  console.log('Request', cookies);
   if (!cookies?.jwt) {
     return res.status(401).json({
       Success: false,
@@ -153,6 +162,7 @@ exports.refreshToken = async (req, res) => {
     },
   });
   if (!user) {
+    console.log('User not found');
     return res.status(403).json({
       Success: false,
       Message: 'User not found',
@@ -165,18 +175,112 @@ exports.refreshToken = async (req, res) => {
         Message: 'Invalid token',
       });
     }
-    const acessToken = jwt.sign(
+    const accessToken = jwt.sign(
       {
         userId: user.id,
         username: user.username,
       },
       process.env.ACCESS_TOKEN,
       {
-        expiresIn: '1m',
+        expiresIn: '1d',
       }
     );
     res.status(200).json({
-      acessToken,
+      accessToken,
+      userId: user.id,
+      username: user.username,
+      roles: user.roleId,
     });
+  });
+};
+
+exports.getUser = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      id: req.userId,
+    },
+  });
+  if (!user) {
+    return res.status(404).json({
+      Success: false,
+      Message: 'User not found',
+    });
+  }
+  res.status(200).json({
+    user: {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    },
+  });
+};
+exports.updateUser = async (req, res) => {
+  const { email, password, roleId, name, bio, darkMode } = req.body;
+  const user = await User.findOne({
+    where: {
+      id: req.userId,
+    },
+  });
+  if (!user) {
+    return res.status(404).json({
+      Success: false,
+      Message: 'User not found',
+    });
+  }
+  if (email) {
+    user.update({
+      email,
+    });
+  }
+  if (password) {
+    user.update({
+      password: await bcrypt.hash(password, 10),
+    });
+  }
+  if (roleId) {
+    user.update({
+      roleId,
+    });
+  }
+  if (name) {
+    user.update({
+      name,
+    });
+  }
+  if (bio) {
+    user.update({
+      bio,
+    });
+  }
+  if (darkMode) {
+    user.update({
+      darkMode,
+    });
+  }
+  res.status(200).json({
+    user: {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    },
+  });
+};
+
+exports.delteUser = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      id: req.userId,
+    },
+  });
+  if (!user) {
+    return res.status(404).json({
+      Success: false,
+      Message: 'User not found',
+    });
+  }
+  user.destroy();
+  res.status(200).json({
+    Success: true,
+    Message: 'User deleted',
   });
 };
