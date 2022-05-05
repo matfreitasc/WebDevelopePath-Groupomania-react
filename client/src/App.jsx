@@ -23,7 +23,7 @@ function App() {
             <Route element={<RequireAuth />}>
               <Route path='/' element={<Main />} />
               <Route path='/post/:id' element={<Post />} />
-              <Route path='profile/:id' element={<Profile />} />
+              <Route path='/profile/:id' element={<Profile />} />
             </Route>
           </Route>
           {/* Error Page */}

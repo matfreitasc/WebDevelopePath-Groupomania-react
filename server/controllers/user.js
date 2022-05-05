@@ -96,10 +96,17 @@ exports.login = async (req, res) => {
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
+
       res.status(200).json({
         accessToken,
         userId: user.id,
+        email: user.email,
         username: user.username,
+        name: user.name,
+        bio: user.bio,
+        profilePicture: user.profile_image,
+        profileBanner: user.profile_banner,
+        darkMode: user.darkMode,
         role: user.roleId,
       });
     } else {
@@ -207,11 +214,15 @@ exports.getUser = async (req, res) => {
     });
   }
   res.status(200).json({
-    user: {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-    },
+    userId: user.id,
+    email: user.email,
+    username: user.username,
+    name: user.name,
+    bio: user.bio,
+    profilePicture: user.profile_image,
+    profileBanner: user.profile_banner,
+    darkMode: user.darkMode,
+    role: user.roleId,
   });
 };
 exports.updateUser = async (req, res) => {

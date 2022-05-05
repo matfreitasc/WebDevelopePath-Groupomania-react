@@ -31,7 +31,20 @@ export default function Login() {
       const username = res.data.username;
       const userId = res.data.userId;
       const userRole = res.data.role;
-      setAuth({ accessToken, username, userId, email, userRole });
+      const name = res.data.nam;
+      const bio = res.data.bio;
+      const darkMode = res.data.darkMode;
+
+      setAuth({
+        accessToken,
+        username,
+        userId,
+        email,
+        userRole,
+        name,
+        bio,
+        darkMode,
+      });
       setEmail('');
       setPassword('');
       navigate(from, { replace: true });

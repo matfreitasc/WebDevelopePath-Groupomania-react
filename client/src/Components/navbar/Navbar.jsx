@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../Components/modal/Modal';
 import Logo from '../../assets/images/logo-white.png';
 import useLogout from '../../hooks/useLogout';
+import useAuth from '../../hooks/useAuth';
 
 const navigation = [{ name: 'Dashboard', href: '#', current: true }];
 
@@ -12,13 +13,21 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 export default function Main() {
+  const { auth } = useAuth();
   let navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [userId, setUserId] = useState('');
   const logout = useLogout();
+
   const signOut = async () => {
     await logout();
     navigate('/login');
   };
+  useEffect(() => {
+    if (auth) {
+      setUserId(auth.userId);
+    }
+  }, []);
 
   return (
     <Disclosure as='nav' className='bg-gray-800 z-10'>
@@ -65,7 +74,9 @@ export default function Main() {
                     <Menu.Item>
                       {({ active }) => (
                         <a
-                          href='#'
+                          onClick={() => {
+                            navigate(`/profile/${userId}`);
+                          }}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-gray-700'

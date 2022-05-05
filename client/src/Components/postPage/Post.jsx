@@ -3,7 +3,7 @@ import { useEffect, Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import Navbar from '../../Layouts/navbar/Navbar';
+import Navbar from '../../Components/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 
 function Post() {

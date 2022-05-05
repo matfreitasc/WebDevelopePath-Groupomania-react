@@ -1,8 +1,8 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import { axiosPrivate } from '../api/axios';
-import useAuth from '../hooks/useAuth';
+import { axiosPrivate } from '../../api/axios';
+import useAuth from '../../hooks/useAuth';
 
 function Posts() {
   const { auth } = useAuth();

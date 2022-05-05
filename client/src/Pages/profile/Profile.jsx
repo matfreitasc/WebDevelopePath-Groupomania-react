@@ -1,10 +1,15 @@
 import { React, useEffect, useState, Fragment } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
+import Navbar from '../../Components/navbar/Navbar';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Profile() {
   const [userId, setUserId] = useState('');
 
   return (
     <>
+      <Navbar />
       <div>
         <div className='md:grid md:grid-cols-3 md:gap-6'>
           <div className='md:col-span-1'>

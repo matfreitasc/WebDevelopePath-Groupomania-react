@@ -1,7 +1,6 @@
 import React from 'react';
-import Posts from '../../Components/Posts';
-import Navbar from '../../Layouts/navbar/Navbar';
-
+import Posts from './Posts';
+import Navbar from '../../Components/navbar/Navbar';
 function Main() {
   return (
     <div>
