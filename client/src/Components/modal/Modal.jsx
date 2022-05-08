@@ -135,7 +135,7 @@ export default function Modal({ openModal, setOpenModal }) {
                     </div>
                     <div className='mt-2 relative'>
                       {!imageUpload ? (
-                        <DragAndDrop FileSelectedHandler />
+                        <DragAndDrop />
                       ) : (
                         <Fragment>
                           <div

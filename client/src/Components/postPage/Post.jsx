@@ -220,10 +220,12 @@ function Post() {
               {comments.map((comments, key) => (
                 <div
                   key={key}
-                  className='bg-gray-50 rounded-md p-2 relative dark:bg-gray-900 '
+                  className='bg-gray-50 rounded-md p-2 relative dark:bg-gray-900 dark:text-white '
                 >
                   <p>
-                    <span className='text-blue-500'>{comments.username}</span>
+                    <span className='text-blue-500 dark:text-gray-500'>
+                      {comments.username}
+                    </span>
                   </p>
                   <Menu>
                     {userId === comments.userId ? (

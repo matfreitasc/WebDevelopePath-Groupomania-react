@@ -51,7 +51,7 @@ function Posts() {
   return (
     <div className='min-w-[350px] overflow-x-hidden'>
       {posts.reverse().map((post) => (
-        <div>
+        <div key={post.id}>
           <div className='container mx-auto flex justify-center mt-5'>
             <div className='w-4/6 relative mb-10'>
               <div className='shadow sm:rounded-md sm:overflow-hidden'>
