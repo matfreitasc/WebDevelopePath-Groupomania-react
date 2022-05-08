@@ -15,6 +15,10 @@ const useRefreshToken = () => {
         accessToken: response.data.accessToken,
         userId: response.data.userId,
         username: response.data.username,
+        userRole: response.data.role,
+        name: response.data.name,
+        bio: response.data.bio,
+        darkMode: response.data.darkMode,
       };
     });
     return response.data.accessToken;

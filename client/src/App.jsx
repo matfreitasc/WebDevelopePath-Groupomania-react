@@ -6,6 +6,7 @@ import Post from './Components/postPage/Post';
 import Login from './Pages/auth/login/Login';
 import Signup from './Pages/auth/signup/Signup';
 import Profile from './Pages/profile/Profile';
+import Settings from './Pages/settings/Settings';
 import Layout from './Components/layout/Layout';
 import PersistLogin from './Components/persistLogin/PersistLogin';
 
@@ -24,6 +25,7 @@ function App() {
               <Route path='/' element={<Main />} />
               <Route path='/post/:id' element={<Post />} />
               <Route path='/profile/:id' element={<Profile />} />
+              <Route path='/settings/:id' element={<Settings />} />
             </Route>
           </Route>
           {/* Error Page */}

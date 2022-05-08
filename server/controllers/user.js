@@ -155,7 +155,6 @@ exports.logout = async (req, res) => {
 
 exports.refreshToken = async (req, res) => {
   const cookies = req.cookies;
-  console.log('Request', cookies);
   if (!cookies?.jwt) {
     return res.status(401).json({
       Success: false,
@@ -195,8 +194,14 @@ exports.refreshToken = async (req, res) => {
     res.status(200).json({
       accessToken,
       userId: user.id,
+      email: user.email,
       username: user.username,
-      roles: user.roleId,
+      name: user.name,
+      bio: user.bio,
+      profilePicture: user.profile_image,
+      profileBanner: user.profile_banner,
+      darkMode: user.darkMode,
+      role: user.roleId,
     });
   });
 };
@@ -226,15 +231,15 @@ exports.getUser = async (req, res) => {
   });
 };
 exports.updateUser = async (req, res) => {
-  const { email, password, roleId, name, bio, darkMode } = req.body;
+  const id = req.params.id;
+  const { email, password, roleId, name, bio, darkMode, username } = req.body;
   const user = await User.findOne({
     where: {
-      id: req.userId,
+      id: id,
     },
   });
   if (!user) {
     return res.status(404).json({
-      Success: false,
       Message: 'User not found',
     });
   }
@@ -268,11 +273,22 @@ exports.updateUser = async (req, res) => {
       darkMode,
     });
   }
+  if (username) {
+    user.update({
+      username,
+    });
+  }
   res.status(200).json({
     user: {
-      id: user.id,
+      userId: user.id,
       email: user.email,
       username: user.username,
+      name: user.name,
+      bio: user.bio,
+      profilePicture: user.profile_image,
+      profileBanner: user.profile_banner,
+      darkMode: user.darkMode,
+      role: user.roleId,
     },
   });
 };
