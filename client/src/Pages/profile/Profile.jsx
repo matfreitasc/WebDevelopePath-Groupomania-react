@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Navbar from '../../Components/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
-import UserPost from '../../Components/layout/userposts/Post';
+import UserPost from '../../Components/layout/userposts/Post'; // The layout element for the user's posts
 
 export default function Profile() {
   const axiosPrivate = useAxiosPrivate();
@@ -76,18 +76,18 @@ export default function Profile() {
         </div>
       </div>
       <div className='max-w-lg pt-1 mx-auto mt-2 bg-white rounded-lg shadow-lg dark:bg-gray-600 '>
-        <Fragment>
-          {posts.map((post) => (
-            <UserPost
-              userId={post.userId}
-              postId={post.postId}
-              username={post.username}
-              imageUrl={post.imageUrl}
-              content={post.content}
-              postTitle={post.postTitle}
-            />
-          ))}
-        </Fragment>
+        {/* Not a function? */}
+
+        {posts.map((post) => (
+          <UserPost
+            userId={post.userId}
+            postId={post.postId}
+            username={post.username}
+            imageUrl={post.imageUrl}
+            content={post.content}
+            postTitle={post.postTitle}
+          />
+        ))}
       </div>
     </>
   );
