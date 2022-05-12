@@ -207,9 +207,11 @@ exports.refreshToken = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
+  const id = req.params.id;
+
   const user = await User.findOne({
     where: {
-      id: req.userId,
+      id: id,
     },
   });
   if (!user) {
@@ -233,6 +235,7 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const id = req.params.id;
   const { email, password, roleId, name, bio, darkMode, username } = req.body;
+  console.log(req.body);
   const user = await User.findOne({
     where: {
       id: id,

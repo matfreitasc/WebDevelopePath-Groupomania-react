@@ -2,8 +2,6 @@ import * as React from 'react';
 import { Fragment, useState, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../Components/modal/Modal';
-import Logo from '../../assets/images/logo-white.png';
 import useLogout from '../../hooks/useLogout';
 import useAuth from '../../hooks/useAuth';
 import Toggle from '../ThemeToggle';
@@ -17,7 +15,6 @@ function classNames(...classes) {
 export default function Main() {
   const { auth } = useAuth();
   let navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState('');
   const logout = useLogout();
 
@@ -29,7 +26,7 @@ export default function Main() {
     if (auth) {
       setUserId(auth.userId);
     }
-  }, []);
+  }, [auth]);
 
   return (
     <Disclosure as='nav' className='bg-gray-800 dark:bg-gray-900 z-10'>
@@ -44,14 +41,7 @@ export default function Main() {
               </div>
             </div>
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
-              <button
-                className='mr-2 bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium  focus:outline-none focus:ring-2 focus:ring-outline-white'
-                onClick={() => setOpenModal(true)}
-              >
-                Create Post
-              </button>
               <Toggle />
-              <Modal openModal={openModal} setOpenModal={setOpenModal} />
               {/* Profile dropdown */}
               <Menu as='div' className='ml-3 relative z-20'>
                 <div>
@@ -76,45 +66,45 @@ export default function Main() {
                   <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20'>
                     <Menu.Item>
                       {({ active }) => (
-                        <a
+                        <p
                           onClick={() => {
                             navigate(`/profile/${userId}`);
                           }}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
+                            'block px-4 py-2 text-sm text-gray-700 cursor-pointer'
                           )}
                         >
                           Your Profile
-                        </a>
+                        </p>
                       )}
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
-                        <a
+                        <p
                           onClick={() => {
                             navigate(`/settings/${userId}`);
                           }}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700 '
+                            'block px-4 py-2 text-sm text-gray-700 cursor-pointer'
                           )}
                         >
                           Settings
-                        </a>
+                        </p>
                       )}
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
-                        <a
+                        <p
                           onClick={() => signOut()}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700 w-full'
+                            'block px-4 py-2 text-sm text-gray-700 w-full cursor-pointer'
                           )}
                         >
                           Sign out
-                        </a>
+                        </p>
                       )}
                     </Menu.Item>
                   </Menu.Items>

@@ -68,7 +68,7 @@ export default function Login() {
 
   return (
     <>
-      <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 h-screen dark:bg-gray-900 '>
         <div className='max-w-md w-full space-y-8'>
           <div>
             <div className='flex items-center justify-center'>
@@ -76,7 +76,7 @@ export default function Login() {
                 data-v-5f19e91b=''
                 viewBox='0 0 485 78'
                 xmlns='http://www.w3.org/2000/svg'
-                className='h-13 w-auto fill-black'
+                className='h-13 w-auto fill-black dark:fill-[#e94425]'
               >
                 <g
                   transform='matrix(4.5697 0 0 4.5697 96.33 -2.2311)'
@@ -99,11 +99,11 @@ export default function Login() {
             <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
               Sign in to your account
             </h2>
-            <p className='mt-2 text-center text-sm text-gray-600'>
+            <p className='mt-2 text-center text-sm text-gray-600 '>
               Or{' '}
               <a
                 href='/signup'
-                className='font-medium text-indigo-600 hover:text-indigo-500'
+                className='font-medium text-indigo-600 hover:text-indigo-500 dark:text-white'
               >
                 Sign up
               </a>

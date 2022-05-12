@@ -1,9 +1,16 @@
 module.exports = {
-  content: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
+  content: [
+    './public/**/*.html',
+    './node_modules/flowbite/**/*.js',
+    './src/**/*.{js,jsx,ts,tsx}',
+  ],
+
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {},
+      colors: {
+        logoOrange: '#e94425',
+      },
     },
     container: {
       center: true,
@@ -20,6 +27,6 @@ module.exports = {
     variants: {
       extend: {},
     },
-    plugins: [],
   },
+  plugins: [require('flowbite/plugin')],
 };

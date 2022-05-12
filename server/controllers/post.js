@@ -1,7 +1,7 @@
 const { Posts } = require('../models/');
 
 exports.allPosts = async (req, res) => {
-  const allPosts = await Posts.findAll();
+  const allPosts = await Posts.findAll({ order: [['updatedAt', 'DESC']] });
   res.send(allPosts);
 };
 
@@ -21,7 +21,6 @@ exports.create = async (req, res) => {
     const post = await Posts.create({
       ...body,
     });
-    console.log(req.file);
     res.status(201).json({
       message: 'Post created!',
       post,
@@ -31,7 +30,6 @@ exports.create = async (req, res) => {
       ...body,
       imageUrl: url + '/images/' + req.file.filename,
     });
-    console.log(post);
     res.status(201).json({
       message: 'Post created!',
       post,
@@ -90,4 +88,12 @@ exports.updatePost = async (req, res) => {
       post,
     });
   }
+};
+exports.getUserPosts = async (req, res) => {
+  const post = await Posts.findAll({
+    where: {
+      userId: req.params.id,
+    },
+  });
+  res.send(post);
 };

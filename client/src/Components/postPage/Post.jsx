@@ -32,7 +32,6 @@ function Post() {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-
     const fetchPost = async () => {
       try {
         const response = await axiosPrivate.get(`/posts/${id}`, {
@@ -53,8 +52,8 @@ function Post() {
         navigate('/login', { state: { from: location }, replace: true });
       }
     };
-    fetchComments();
     fetchPost();
+    fetchComments();
     return () => {
       controller.abort();
       isMounted = false;
@@ -96,16 +95,16 @@ function Post() {
                       navigate(`/profile/${post.userId}`);
                     }}
                   >
-                    Posted by: ‎
+                    Posted by:{' '}
                     <p className='inline-block hover:underline '>
                       {post.username}
                     </p>
                   </div>
-                  {userId === post.userId ? (
+                  {userId === post.userId && showEdit === true ? (
                     <input
                       type='text'
                       value={post.title}
-                      className='text-black font-bold text-xl dark:text-white bg-transparent'
+                      className='text-black font-bold text-xl px-1 dark:text-white bg-transparent rounded-sm border-2 border-gray-400 dark:border-gray-300'
                       onChange={(e) =>
                         setPost({ ...post, title: e.target.value })
                       }
@@ -117,8 +116,7 @@ function Post() {
                             userId: post.userId,
                           })
                           .then((res) => {
-                            setPost(res.data);
-                            window.location.reload();
+                            setPost({ ...post, title: res.data.title });
                           });
                       }}
                     />
@@ -159,7 +157,11 @@ function Post() {
                       <Menu.Item>
                         <button
                           onClick={() => {
-                            setShowEdit(true);
+                            if (userId === post.userId && showEdit === false) {
+                              setShowEdit(true);
+                            } else {
+                              setShowEdit(false);
+                            }
                           }}
                           className='block px-4 py-2'
                         >
@@ -180,7 +182,29 @@ function Post() {
                   </Transition>
                 </Menu>
               </div>
-              <p className=' dark:text-gray-300'>{post.content}</p>
+              {userId === post.userId && showEdit === true ? (
+                <textarea
+                  type='text'
+                  value={post.content}
+                  className=' dark:text-gray-300 bg-transparent shadow-sm  block w-full h-10 sm:text-sm border-2 border-gray-300 rounded-sm p-1'
+                  onChange={(e) =>
+                    setPost({ ...post, content: e.target.value })
+                  }
+                  onBlur={() => {
+                    axiosPrivate
+                      .put(`/posts/${id}`, {
+                        content: post.content,
+                        body: post.body,
+                        userId: post.userId,
+                      })
+                      .then((res) => {
+                        setPost({ ...post, content: res.data.content });
+                      });
+                  }}
+                />
+              ) : (
+                <p className='dark:text-gray-300'>{post.content}</p>
+              )}
               {post.imageUrl ? (
                 <img
                   src={post.imageUrl}
@@ -256,14 +280,14 @@ function Post() {
                     >
                       <Menu.Items className='origin-top-right absolute right-0 w-fit rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none dark:ring-white dark:bg-gray-700'>
                         <Menu.Item>
-                          <a
+                          <p
                             onClick={() => {
                               deleteComment(comments.id);
                             }}
-                            className='blck px-4 py-72 dark:text-white'
+                            className='blck px-4 py-72 dark:text-white cursor-pointer'
                           >
                             Delete
-                          </a>
+                          </p>
                         </Menu.Item>
                       </Menu.Items>
                     </Transition>

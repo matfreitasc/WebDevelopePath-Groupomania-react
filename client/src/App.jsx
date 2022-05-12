@@ -9,6 +9,8 @@ import Profile from './Pages/profile/Profile';
 import Settings from './Pages/settings/Settings';
 import Layout from './Components/layout/Layout';
 import PersistLogin from './Components/persistLogin/PersistLogin';
+import ErrorPage from './Pages/error/ErrorPage';
+import 'flowbite';
 
 function App() {
   return (
@@ -29,7 +31,7 @@ function App() {
             </Route>
           </Route>
           {/* Error Page */}
-          <Route path='*' element={<h1>404</h1>} />
+          <Route path='*' element={<ErrorPage />} />
         </Route>
       </Routes>
     </>
