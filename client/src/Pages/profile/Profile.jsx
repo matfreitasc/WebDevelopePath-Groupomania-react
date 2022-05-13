@@ -11,8 +11,6 @@ export default function Profile() {
   const [posts, setPosts] = useState([]);
   const [userId, setUserId] = useState('');
   const [user] = useState('');
-  const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     if (auth) {
@@ -21,26 +19,17 @@ export default function Profile() {
   }, [auth]);
 
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-
-    const fetchPost = async () => {
-      try {
-        const response = await axiosPrivate.get(`/posts/user/${userId}`, {
-          signal: controller.signal,
+    if (userId) {
+      axiosPrivate
+        .get(`/posts/user/${userId}`)
+        .then((res) => {
+          setPosts(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        isMounted && setPosts(response.data);
-        console.log(response.data);
-      } catch (err) {
-        navigate('/*', { state: { from: location }, replace: true });
-      }
-    };
-    fetchPost();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
+    }
+  }, [userId]);
 
   return (
     <>
@@ -77,17 +66,19 @@ export default function Profile() {
       </div>
       <div className='max-w-lg pt-1 mx-auto mt-2 bg-white rounded-lg shadow-lg dark:bg-gray-600 '>
         {/* Not a function? */}
-
-        {posts.map((post) => (
-          <UserPost
-            userId={post.userId}
-            postId={post.postId}
-            username={post.username}
-            imageUrl={post.imageUrl}
-            content={post.content}
-            postTitle={post.postTitle}
-          />
-        ))}
+        {console.log(posts)}
+        {posts.length !== 0 &&
+          posts.map((post) => (
+            <UserPost
+              key={post.id}
+              userId={post.userId}
+              postId={post.postId}
+              username={post.username}
+              imageUrl={post.imageUrl}
+              content={post.content}
+              postTitle={post.postTitle}
+            />
+          ))}
       </div>
     </>
   );
