@@ -1,10 +1,12 @@
 import { React, useState } from 'react';
+import { useNavigate } from 'react-router';
 import Navbar from '../../Components/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 export default function Profile() {
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
   const [username, setUsername] = useState(auth?.username);
   const [userId, setUserId] = useState(auth?.userId);
@@ -23,6 +25,17 @@ export default function Profile() {
         name,
         email: userEmail,
       })
+      .then((res) => {
+        setAuth();
+        navigate('/login');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleDelete = (e) => {
+    axiosPrivate
+      .delete(`/auth/user/${userId}`)
       .then((res) => {
         setAuth();
       })
@@ -126,7 +139,7 @@ export default function Profile() {
                   />
                 </div>
               </div>
-              <div className='text-center md:w-3/12 md:pl-6'>
+              <div className='max-w-sm mx-auto space-y-5 md:w-5/12 md:pl-5 md:inline-flex'>
                 <button
                   type='button'
                   className='py-2 px-4  bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
@@ -138,6 +151,22 @@ export default function Profile() {
                 </button>
               </div>
             </div>
+            <hr />
+            <div className='flex items-center justify-between w-full p-8 space-y-4 text-gray-500 md:inline-flex md:space-y-0 dark:text-white'>
+              <h2 className='w-fit'>Delete Account</h2>
+              <div className='text-center w-4/12  max-w-sm'>
+                <button
+                  type='button'
+                  className=' py-2 bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                >
+                  Delete Account
+                </button>
+              </div>
+            </div>
+
             <hr />
             <div className='w-full px-4 pb-4 ml-auto text-gray-500 md:w-1/3'>
               <button

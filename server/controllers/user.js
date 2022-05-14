@@ -38,7 +38,6 @@ exports.register = async (req, res) => {
         id: newUser.id,
         email: newUser.email,
         username: newUser.username,
-        role: newUser.roleId,
       },
     });
   } catch (err) {
@@ -229,7 +228,6 @@ exports.getUser = async (req, res) => {
     profilePicture: user.profile_image,
     profileBanner: user.profile_banner,
     darkMode: user.darkMode,
-    role: user.roleId,
   });
 };
 exports.updateUser = async (req, res) => {
