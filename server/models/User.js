@@ -29,11 +29,6 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    darkMode: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: true,
-    },
     refreshToken: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -43,10 +38,6 @@ module.exports = function (sequelize, DataTypes) {
   User.associate = function (models) {
     User.hasMany(models.Likes, {
       onDelete: 'CASCADE',
-    });
-    User.hasOne(models.Role, {
-      foreignKey: 'userId',
-      as: 'role',
     });
   };
 

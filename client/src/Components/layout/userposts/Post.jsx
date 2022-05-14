@@ -13,10 +13,13 @@ export default function UserPost({
   return (
     <>
       <div key={postId}>
-        <div className='container flex justify-center mt-5 '>
+        <div className='flex justify-center mt-5  w-full'>
           <div className=' w-full relative mb-2'>
-            <div className='shadow sm:rounded-md sm:overflow-hidden'>
-              <div className='px-5  bg-white dark:bg-gray-900 space-y-3  '>
+            <div className='shadow rounded-md sm:overflow-hidden'>
+              <div
+                className='px-5 pt-2
+               bg-white dark:bg-gray-900 space-y-3  '
+              >
                 <div className='flex justify-between'>
                   <div>
                     <div
