@@ -39,6 +39,9 @@ module.exports = function (sequelize, DataTypes) {
     User.hasMany(models.Likes, {
       onDelete: 'CASCADE',
     });
+    User.hasMany(models.Viewes, {
+      onDelete: 'CASCADE',
+    });
   };
 
   return User;
