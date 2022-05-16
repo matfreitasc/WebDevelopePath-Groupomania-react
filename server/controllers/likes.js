@@ -1,6 +1,7 @@
 const Likes = require('../models/Likes');
 
 exports.like = async (req, res) => {
+  console.log('Request ', req);
   const { PostId } = req.body;
   const UserId = req.userId;
   const found = await Likes.findOne({
@@ -9,7 +10,6 @@ exports.like = async (req, res) => {
       UserId: UserId,
     },
   });
-  console.log(found);
   if (!found) {
     await Likes.create({
       PostId: PostId,
@@ -19,7 +19,6 @@ exports.like = async (req, res) => {
       message: 'Liked!',
     });
   } else {
-    console.log(found);
     await Likes.destroy({
       where: {
         PostId: PostId,
