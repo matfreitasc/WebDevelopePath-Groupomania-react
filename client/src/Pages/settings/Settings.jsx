@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import Navbar from '../../Components/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import DeleteModal from '../../Components/layout/DeleteModal';
 
 export default function Profile() {
   const axiosPrivate = useAxiosPrivate();
@@ -14,6 +15,7 @@ export default function Profile() {
   const [userEmail, setUserEmail] = useState(auth?.email);
   const [password, setPassword] = useState(auth?.password);
   const [name, setName] = useState(auth?.name);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleSubmit = (e) => {
     axiosPrivate
@@ -28,16 +30,6 @@ export default function Profile() {
       .then((res) => {
         setAuth();
         navigate('/login');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const handleDelete = (e) => {
-    axiosPrivate
-      .delete(`/auth/user/${userId}`)
-      .then((res) => {
-        setAuth();
       })
       .catch((err) => {
         console.log(err);
@@ -159,11 +151,14 @@ export default function Profile() {
                   type='button'
                   className=' py-2 bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
                   onClick={() => {
-                    handleSubmit();
+                    setOpenModal(true);
                   }}
                 >
                   Delete Account
                 </button>
+                {openModal && (
+                  <DeleteModal userId={userId} closeModal={setOpenModal} />
+                )}
               </div>
             </div>
 

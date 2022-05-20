@@ -1,4 +1,4 @@
-const Viewes = require('../models/Likes');
+const { Viewes } = require('../models/');
 
 exports.viewes = async (req, res) => {
   const { PostId } = req.body;

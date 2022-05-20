@@ -29,6 +29,9 @@ module.exports = function (sequelize, DataTypes) {
     Posts.hasMany(models.Likes, {
       onDelete: 'CASCADE',
     });
+    Posts.hasMany(models.Dislikes, {
+      onDelete: 'CASCADE',
+    });
     Posts.hasMany(models.Viewes, {
       onDelete: 'CASCADE',
     });

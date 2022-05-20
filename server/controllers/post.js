@@ -1,7 +1,21 @@
 const { Posts } = require('../models/');
+const { Likes } = require('../models/');
+const { Dislikes } = require('../models/');
+const { User } = require('../models/');
 
 exports.allPosts = async (req, res) => {
-  const allPosts = await Posts.findAll({ order: [['updatedAt', 'DESC']] });
+  const allPosts = await Posts.findAll({
+    order: [['updatedAt', 'DESC']],
+    include: [
+      {
+        model: Likes,
+      },
+      {
+        // model Dislikes with total dislikes
+        model: Dislikes,
+      },
+    ],
+  });
   res.send(allPosts);
 };
 

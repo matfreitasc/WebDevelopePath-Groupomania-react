@@ -10,5 +10,6 @@ router.get('/refresh', userController.refreshToken);
 router.get('/logout', userController.logout);
 router.get('/user/:id', auth, userController.getUser);
 router.put('/user/:id', auth, userController.updateUser);
+router.delete('/user/:id', auth, userController.deleteUser);
 
 module.exports = router;

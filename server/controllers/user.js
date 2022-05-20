@@ -294,7 +294,7 @@ exports.updateUser = async (req, res) => {
   });
 };
 
-exports.delteUser = async (req, res) => {
+exports.deleteUser = async (req, res) => {
   const user = await User.findOne({
     where: {
       id: req.userId,

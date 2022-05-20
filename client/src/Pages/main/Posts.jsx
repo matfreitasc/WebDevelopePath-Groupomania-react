@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { axiosPrivate } from '../../api/axios';
+import Like from '../../Components/layout/likeSystem/Like';
 import useAuth from '../../hooks/useAuth';
 import Modal from '../../Components/modal/CreatePost';
 
@@ -16,6 +17,7 @@ function Posts() {
     await axiosPrivate.delete(`/posts/${postId}`);
     setPosts(posts.filter((post) => post.id !== postId));
   };
+
   useEffect(() => {
     if (auth) {
       setUserId(auth.userId);
@@ -23,13 +25,6 @@ function Posts() {
   }, [auth]);
 
   useEffect(() => {
-    axiosPrivate.get('/posts').then((res) => {
-      setPosts(res.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
     const controller = new AbortController();
 
     const fetchPost = async () => {
@@ -37,14 +32,13 @@ function Posts() {
         const response = await axiosPrivate.get(`/posts/`, {
           signal: controller.signal,
         });
-        isMounted && setPosts(response.data);
+        setPosts(response.data);
       } catch (err) {
         navigate('/login', { state: { from: location }, replace: true });
       }
     };
     fetchPost();
     return () => {
-      isMounted = false;
       controller.abort();
     };
   }, []);
@@ -52,7 +46,6 @@ function Posts() {
   return (
     <>
       <Modal />
-
       <div className='min-w-[350px] overflow-x-hidden '>
         {posts.map((post) => (
           <div key={post.id}>
@@ -116,33 +109,38 @@ function Posts() {
                         </Transition>
                       </Menu>
                     </div>
-                    <h1
-                      className='text-2xl font-bold text-gray-900 dark:text-gray-100'
-                      onClick={() => {
-                        navigate(`/post/${post.id}`);
-                      }}
-                    >
-                      {post.title}
-                    </h1>
-
-                    <p
-                      className=' dark:text-gray-300 pb-4'
-                      onClick={() => {
-                        navigate(`/post/${post.id}`);
-                      }}
-                    >
-                      {post.content}
-                    </p>
-                    {post.imageUrl ? (
-                      <img
-                        src={post.imageUrl}
-                        alt='post'
-                        className='w-full h-auto object-cover object-center rounded-md shadow-md pb-4'
+                    <div>
+                      <h1
+                        className='text-2xl font-bold text-gray-900 dark:text-gray-100'
                         onClick={() => {
                           navigate(`/post/${post.id}`);
                         }}
-                      />
-                    ) : null}
+                      >
+                        {post.title}
+                      </h1>
+
+                      <p
+                        className=' dark:text-gray-300 pb-4'
+                        onClick={() => {
+                          navigate(`/post/${post.id}`);
+                        }}
+                      >
+                        {post.content}
+                      </p>
+                      {post.imageUrl ? (
+                        <img
+                          src={post.imageUrl}
+                          alt='post'
+                          className='w-full h-auto object-cover object-center rounded-md shadow-md pb-4'
+                          onClick={() => {
+                            navigate(`/post/${post.id}`);
+                          }}
+                        />
+                      ) : null}
+                    </div>
+                    <div>
+                      <Like UserId={post.userId} postId={post.id} />
+                    </div>
                   </div>
                 </div>
               </div>
