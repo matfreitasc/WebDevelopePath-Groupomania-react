@@ -1,7 +1,4 @@
-const { Posts } = require('../models/');
-const { Likes } = require('../models/');
-const { Dislikes } = require('../models/');
-const { User } = require('../models/');
+const { Posts, Likes, Dislikes, Viewes } = require('../models/');
 
 exports.allPosts = async (req, res) => {
   const allPosts = await Posts.findAll({
@@ -11,8 +8,10 @@ exports.allPosts = async (req, res) => {
         model: Likes,
       },
       {
-        // model Dislikes with total dislikes
         model: Dislikes,
+      },
+      {
+        model: Viewes,
       },
     ],
   });
