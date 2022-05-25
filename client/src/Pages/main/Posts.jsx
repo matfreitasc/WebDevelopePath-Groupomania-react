@@ -5,6 +5,7 @@ import { axiosPrivate } from '../../api/axios';
 import Like from '../../Components/layout/likeSystem/Like';
 import useAuth from '../../hooks/useAuth';
 import Modal from '../../Components/modal/CreatePost';
+import Viewed from '../../Components/layout/viewedSystem/Viewed';
 
 function Posts() {
   const { auth } = useAuth();
@@ -13,16 +14,22 @@ function Posts() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const deletePost = async (postId) => {
-    await axiosPrivate.delete(`/posts/${postId}`);
-    setPosts(posts.filter((post) => post.id !== postId));
-  };
-
   useEffect(() => {
     if (auth) {
       setUserId(auth.userId);
     }
   }, [auth]);
+
+  const deletePost = async (postId) => {
+    await axiosPrivate.delete(`/posts/${postId}`);
+    setPosts(posts.filter((post) => post.id !== postId));
+  };
+
+  const MarkAsViewed = (postId) => {
+    axiosPrivate.post(`/posts/${postId}/viewes`, {
+      userId: userId,
+    });
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -41,10 +48,10 @@ function Posts() {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [navigate, location]);
 
   return (
-    <>
+    <main>
       <Modal />
       <div className='min-w-[350px] overflow-x-hidden '>
         {posts.map((post) => (
@@ -59,6 +66,7 @@ function Posts() {
                           className='text-xs mb-2 dark:text-gray-400 block'
                           onClick={() => {
                             navigate(`/profile/${post.userId}`);
+                            MarkAsViewed(post.id);
                           }}
                         >
                           Posted by:{' '}
@@ -66,7 +74,14 @@ function Posts() {
                             {post.username}
                           </p>
                         </div>
+                        <Viewed
+                          postId={post.id}
+                          postViewes={post.Viewes}
+                          userId={userId}
+                          postUserId={post.userId}
+                        />
                       </div>
+
                       <Menu>
                         {userId === post.userId ? (
                           <Menu.Button className='origin-top-right '>
@@ -114,6 +129,7 @@ function Posts() {
                         className='text-2xl font-bold text-gray-900 dark:text-gray-100'
                         onClick={() => {
                           navigate(`/post/${post.id}`);
+                          MarkAsViewed(post.id);
                         }}
                       >
                         {post.title}
@@ -123,6 +139,7 @@ function Posts() {
                         className=' dark:text-gray-300 pb-4'
                         onClick={() => {
                           navigate(`/post/${post.id}`);
+                          MarkAsViewed(post.id);
                         }}
                       >
                         {post.content}
@@ -134,12 +151,18 @@ function Posts() {
                           className='w-full h-auto object-cover object-center rounded-md shadow-md pb-4'
                           onClick={() => {
                             navigate(`/post/${post.id}`);
+                            MarkAsViewed(post.id);
                           }}
                         />
                       ) : null}
                     </div>
-                    <div>
-                      <Like UserId={post.userId} postId={post.id} />
+                    <div className='flex row justify-between'>
+                      <Like userId={post.userId} postId={post.id} />
+                      <p className='dark:text-white'>
+                        {post.Viewes.length === 1
+                          ? post.Viewes.length + ' View'
+                          : post.Viewes.length + ' Viewes'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -148,7 +171,7 @@ function Posts() {
           </div>
         ))}
       </div>
-    </>
+    </main>
   );
 } //end of function
 
