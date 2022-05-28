@@ -26,13 +26,42 @@ exports.register = async (req, res) => {
   }
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
       email,
       password: hashedPassword,
       username,
       roleId,
     });
+    const accessToken = jwt.sign(
+      {
+        userId: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+      },
+      process.env.ACCESS_TOKEN,
+      {
+        expiresIn: '15m',
+      }
+    );
+    const refreshToken = jwt.sign(
+      {
+        userId: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+      },
+      process.env.REFRESH_TOKEN,
+      {
+        expiresIn: '1d',
+      }
+    );
+    // Save refresh token in DB
+    newUser.update({
+      refreshToken: refreshToken,
+    });
+
     res.status(201).json({
+      accessToken,
       message: 'User created successfully',
       user: {
         id: newUser.id,

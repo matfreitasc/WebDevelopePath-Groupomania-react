@@ -45,7 +45,6 @@ export default function Login() {
         bio,
         darkMode,
       });
-      console.log(auth);
       setEmail('');
       setPassword('');
       navigate(from, { replace: true });

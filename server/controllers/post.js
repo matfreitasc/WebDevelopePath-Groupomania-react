@@ -23,6 +23,11 @@ exports.getOne = async (req, res) => {
     where: {
       id: req.params.id,
     },
+    include: [
+      {
+        model: Viewes,
+      },
+    ],
   });
   res.send(post);
 };
@@ -107,6 +112,12 @@ exports.getUserPosts = async (req, res) => {
     where: {
       userId: req.params.id,
     },
+    order: [['updatedAt', 'DESC']],
+    include: [
+      {
+        model: Viewes,
+      },
+    ],
   });
   res.send(post);
 };

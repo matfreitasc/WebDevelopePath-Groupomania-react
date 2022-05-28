@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { axiosPrivate } from '../../api/axios';
+import Moment from 'moment';
 import Like from '../../Components/layout/likeSystem/Like';
 import useAuth from '../../hooks/useAuth';
 import Modal from '../../Components/modal/CreatePost';
@@ -73,12 +74,17 @@ function Posts() {
                           <p className='inline-block hover:underline '>
                             {post.username}
                           </p>
+                          <p className='inline-block ml-1 '>
+                            {Moment.utc(post.createdAt).fromNow()}
+                          </p>
                         </div>
+
                         <Viewed
                           postId={post.id}
                           postViewes={post.Viewes}
                           userId={userId}
                           postUserId={post.userId}
+                          date={post.createdAt}
                         />
                       </div>
 
