@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Navbar from '../../Components/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
-import UserPost from '../../Components/layout/userposts/Post'; // The layout element for the user's posts
+import UserPost from '../../Components/layout/userposts/Post';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -79,7 +79,9 @@ export default function Profile() {
                 username={post.username}
                 imageUrl={post.imageUrl}
                 content={post.content}
-                postTitle={post.postTitle}
+                postTitle={post.title}
+                date={post.createdAt}
+                postViewes={post.Viewes}
               />
             ))}
         </div>
