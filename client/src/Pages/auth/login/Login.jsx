@@ -28,22 +28,9 @@ export default function Login() {
           withCredentials: true,
         }
       );
-      const accessToken = res.data.accessToken;
-      const username = res.data.username;
-      const userId = res.data.userId;
-      const userRole = res.data.role;
-      const name = res.data.name;
-      const bio = res.data.bio;
-      const darkMode = res.data.darkMode;
+
       setAuth({
-        accessToken,
-        username,
-        userId,
-        email,
-        userRole,
-        name,
-        bio,
-        darkMode,
+        res,
       });
       setEmail('');
       setPassword('');

@@ -11,15 +11,15 @@ const useRefreshToken = () => {
     setAuth((prev) => {
       return {
         ...prev,
-        roles: response.data.roles,
         accessToken: response.data.accessToken,
         userId: response.data.userId,
         username: response.data.username,
         userRole: response.data.role,
         name: response.data.name,
         bio: response.data.bio,
-        darkMode: response.data.darkMode,
         email: response.data.email,
+        profilePicture: response.data.profilePicture,
+        profileBanner: response.data.profileBanner,
       };
     });
     return response.data.accessToken;

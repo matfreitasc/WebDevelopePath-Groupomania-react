@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect, useCallback } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
 import useAuth from '../../hooks/useAuth';
 import { IconContext } from 'react-icons';
 import { FaWindowClose } from 'react-icons/fa';
@@ -7,7 +6,7 @@ import { FaWindowClose } from 'react-icons/fa';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useDropzone } from 'react-dropzone';
 
-export default function Modal({}) {
+export default function Modal() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const [title, setTitle] = useState('');

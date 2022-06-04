@@ -16,6 +16,7 @@ export default function Main() {
   const { auth } = useAuth();
   let navigate = useNavigate();
   const [userId, setUserId] = useState('');
+  const [userImage, setUserImage] = useState('');
   const logout = useLogout();
 
   const signOut = async () => {
@@ -25,7 +26,9 @@ export default function Main() {
   useEffect(() => {
     if (auth) {
       setUserId(auth.userId);
+      setUserImage(auth.profilePicture);
     }
+    console.log('navbar', auth);
   }, [auth]);
 
   return (
@@ -43,13 +46,21 @@ export default function Main() {
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               <Menu as='div' className='ml-3 relative z-20'>
                 <div>
-                  <Menu.Button className='bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white z-20'>
+                  <Menu.Button className='bg-gray-800 flex text-sm  ring-2 ring-white dark:ring-logoOrange rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white z-20'>
                     <span className='sr-only'>Open user menu</span>
-                    <img
-                      className='h-8 w-8 rounded-full'
-                      src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                      alt=''
-                    />
+                    {!userImage || userImage === null ? (
+                      <img
+                        className='w-8 h-8 object-cover object-center rounded-full'
+                        src='https://media.istockphoto.com/photos/very-closeup-view-of-amazing-domestic-pet-in-mirror-round-fashion-is-picture-id1281804798?k=20&m=1281804798&s=612x612&w=0&h=gN9-n0NVMyyQ0GYYoEqPSPCXVZwkCZbRummxgqhxOIU='
+                        alt='Default user is a cat'
+                      />
+                    ) : (
+                      <img
+                        className='w-8 h-8 object-cover object-center rounded-full'
+                        src={userImage}
+                        alt='Default user is a cat'
+                      />
+                    )}
                   </Menu.Button>
                 </div>
                 <Transition

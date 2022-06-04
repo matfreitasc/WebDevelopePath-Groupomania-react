@@ -1,39 +1,82 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import Navbar from '../../Components/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import DeleteModal from '../../Components/layout/DeleteModal';
+import axios from '../../api/axios';
 
 export default function Profile() {
   const axiosPrivate = useAxiosPrivate();
-  const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
-  const [username, setUsername] = useState(auth?.username);
-  const [userId, setUserId] = useState(auth?.userId);
-  const [userAvatar, setUserAvatar] = useState(auth?.profilePicture);
-  const [userEmail, setUserEmail] = useState(auth?.email);
+  const [username, setUsername] = useState(auth.username);
+  const [userId, setUserId] = useState(auth.userId);
+  const [userAvatar, setUserAvatar] = useState(auth.profilePicture);
+  const [preview, setPreview] = useState();
+  const [userEmail, setUserEmail] = useState(auth.email);
   const [password, setPassword] = useState(auth?.password);
-  const [name, setName] = useState(auth?.name);
+  const [name, setName] = useState(auth.name);
   const [openModal, setOpenModal] = useState(false);
 
-  const handleSubmit = (e) => {
-    axiosPrivate
-      .put(`/auth/user/${userId}`, {
-        userId,
-        username,
-        password,
-        profilePicture: userAvatar,
-        name,
-        email: userEmail,
-      })
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('userEmail', userEmail);
+    formData.append('name', name);
+    formData.append('image', userAvatar);
+    console.log(formData);
+    await axiosPrivate
+      .put(
+        `/auth/user/${userId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
-        setAuth();
-        navigate('/login');
-      })
-      .catch((err) => {
-        console.log(err);
+        setName(res.data.name);
+        setUsername(res.data.username);
+        setUserEmail(res.data.email);
+        setUserAvatar(res.data.profilePicture);
+
+        setAuth({
+          ...auth,
+          username: res.data.username,
+          email: res.data.email,
+          name: res.data.name,
+          profilePicture: res.data.profilePicture,
+        });
       });
+  };
+
+  useEffect(() => {
+    console.log(auth);
+    if (!userAvatar || !userAvatar.name || !auth.profilePicture === null) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(userAvatar);
+    setPreview(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [userAvatar, auth.profilePicture]);
+
+  const onSelectFile = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setUserAvatar(undefined);
+      return;
+    }
+
+    // I've kept this example simple by using the first image instead of multiple
+    setUserAvatar(e.target.files[0]);
   };
 
   return (
@@ -45,12 +88,25 @@ export default function Profile() {
           <div className='max-w-sm mx-auto md:w-full md:mx-0'>
             <div className='inline-flex items-center space-x-4'>
               <p className='block relative'>
-                <img
-                  alt='profile'
-                  src='https://images.theconversation.com/files/443350/original/file-20220131-15-1ndq1m6.jpg?ixlib=rb-1.1.0&rect=0%2C0%2C3354%2C2464&q=45&auto=format&w=926&fit=clip'
-                  className='mx-auto mt-10 object-cover rounded-full h-20 w-20 '
-                />
+                {preview ? (
+                  <img
+                    className='mx-auto mt-10 object-cover rounded-full h-20 w-20'
+                    src={preview}
+                    alt='avatar'
+                  />
+                ) : (
+                  <img
+                    className='mx-auto mt-10 object-cover rounded-full h-20 w-20 '
+                    src={userAvatar}
+                    alt='avatar'
+                  />
+                )}
               </p>
+              <input
+                type='file'
+                className='dark:text-white'
+                onChange={onSelectFile}
+              />
             </div>
           </div>
 
@@ -135,9 +191,7 @@ export default function Profile() {
                 <button
                   type='button'
                   className='py-2 px-4  bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
-                  onClick={() => {
-                    handleSubmit();
-                  }}
+                  onClick={handleSubmit}
                 >
                   Change
                 </button>
@@ -167,9 +221,7 @@ export default function Profile() {
               <button
                 type='submit'
                 className='py-2 px-4  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
-                onClick={() => {
-                  handleSubmit();
-                }}
+                onClick={handleSubmit}
               >
                 Save
               </button>

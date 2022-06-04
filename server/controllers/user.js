@@ -1,13 +1,13 @@
 const genUsername = require('unique-username-generator');
 
-const { User } = require('../models/');
+const { User, Posts } = require('../models/');
 require('dotenv').config();
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-  const { email, password, roleId } = req.body;
+  const { email, password } = req.body;
   const username = genUsername.generateUsername();
   if (!email || !password) {
     return res.status(400).json({
@@ -31,7 +31,6 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       username,
-      roleId,
     });
     const accessToken = jwt.sign(
       {
@@ -134,8 +133,6 @@ exports.login = async (req, res) => {
         bio: user.bio,
         profilePicture: user.profile_image,
         profileBanner: user.profile_banner,
-        darkMode: user.darkMode,
-        role: user.roleId,
       });
     } else {
       res.status(401).json({
@@ -228,8 +225,6 @@ exports.refreshToken = async (req, res) => {
       bio: user.bio,
       profilePicture: user.profile_image,
       profileBanner: user.profile_banner,
-      darkMode: user.darkMode,
-      role: user.roleId,
     });
   });
 };
@@ -256,13 +251,15 @@ exports.getUser = async (req, res) => {
     bio: user.bio,
     profilePicture: user.profile_image,
     profileBanner: user.profile_banner,
-    darkMode: user.darkMode,
   });
 };
 exports.updateUser = async (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
+  console.log(url);
+  console.log('Request Body', req.body);
+  console.log('Request File', req.file);
   const id = req.params.id;
-  const { email, password, roleId, name, bio, darkMode, username } = req.body;
-  console.log(req.body);
+  const { email, password, name, username, image } = req.body;
   const user = await User.findOne({
     where: {
       id: id,
@@ -273,9 +270,14 @@ exports.updateUser = async (req, res) => {
       Message: 'User not found',
     });
   }
-  if (email) {
+  const posts = await Posts.findAll({
+    where: {
+      userId: id,
+    },
+  });
+  if (req.body.email) {
     user.update({
-      email,
+      email: req.body.email,
     });
   }
   if (password) {
@@ -283,43 +285,34 @@ exports.updateUser = async (req, res) => {
       password: await bcrypt.hash(password, 10),
     });
   }
-  if (roleId) {
-    user.update({
-      roleId,
-    });
-  }
   if (name) {
     user.update({
       name,
-    });
-  }
-  if (bio) {
-    user.update({
-      bio,
-    });
-  }
-  if (darkMode) {
-    user.update({
-      darkMode,
     });
   }
   if (username) {
     user.update({
       username,
     });
+    posts.forEach(async (post) => {
+      post.update({
+        username,
+      });
+    });
+  }
+  if (req.file !== undefined) {
+    user.update({
+      profile_image: url + '/images/' + req.file.filename,
+    });
   }
   res.status(200).json({
-    user: {
-      userId: user.id,
-      email: user.email,
-      username: user.username,
-      name: user.name,
-      bio: user.bio,
-      profilePicture: user.profile_image,
-      profileBanner: user.profile_banner,
-      darkMode: user.darkMode,
-      role: user.roleId,
-    },
+    userId: user.id,
+    email: user.email,
+    username: user.username,
+    name: user.name,
+    bio: user.bio,
+    profilePicture: user.profile_image,
+    profile_banner: user.profile_banner,
   });
 };
 
