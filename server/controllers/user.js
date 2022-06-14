@@ -31,6 +31,10 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       username,
+      profile_image:
+        'https://media.istockphoto.com/photos/very-closeup-view-of-amazing-domestic-pet-in-mirror-round-fashion-is-picture-id1281804798?k=20&m=1281804798&s=612x612&w=0&h=gN9-n0NVMyyQ0GYYoEqPSPCXVZwkCZbRummxgqhxOIU=',
+      profile_banner:
+        'https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg',
     });
     const accessToken = jwt.sign(
       {
@@ -40,14 +44,13 @@ exports.register = async (req, res) => {
       },
       process.env.ACCESS_TOKEN,
       {
-        expiresIn: '15m',
+        expiresIn: '5m',
       }
     );
     const refreshToken = jwt.sign(
       {
         userId: newUser.id,
         username: newUser.username,
-        email: newUser.email,
       },
       process.env.REFRESH_TOKEN,
       {
@@ -59,14 +62,20 @@ exports.register = async (req, res) => {
       refreshToken: refreshToken,
     });
 
+    res.cookie('jwt', refreshToken, {
+      httpOnly: true,
+      sameSite: 'None',
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     res.status(201).json({
       accessToken,
-      message: 'User created successfully',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-      },
+      userId: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+      name: newUser.name,
+      profilePicture: newUser.profile_image,
+      profileBanner: newUser.profile_banner,
     });
   } catch (err) {
     return res.status(500).json({
@@ -255,11 +264,8 @@ exports.getUser = async (req, res) => {
 };
 exports.updateUser = async (req, res) => {
   const url = req.protocol + '://' + req.get('host');
-  console.log(url);
-  console.log('Request Body', req.body);
-  console.log('Request File', req.file);
   const id = req.params.id;
-  const { email, password, name, username, image } = req.body;
+  const { email, password, name, username } = req.body;
   const user = await User.findOne({
     where: {
       id: id,
@@ -275,9 +281,9 @@ exports.updateUser = async (req, res) => {
       userId: id,
     },
   });
-  if (req.body.email) {
+  if (email) {
     user.update({
-      email: req.body.email,
+      email: email,
     });
   }
   if (password) {
@@ -306,6 +312,8 @@ exports.updateUser = async (req, res) => {
     });
   }
   res.status(200).json({
+    resStatus: true,
+    message: 'Profile updated successfully',
     userId: user.id,
     email: user.email,
     username: user.username,
@@ -322,6 +330,12 @@ exports.deleteUser = async (req, res) => {
       id: req.userId,
     },
   });
+  const posts = await Posts.findAll({
+    where: {
+      userId: req.userId,
+    },
+  });
+
   if (!user) {
     return res.status(404).json({
       Success: false,
@@ -329,6 +343,13 @@ exports.deleteUser = async (req, res) => {
     });
   }
   user.destroy();
+
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
   res.status(200).json({
     Success: true,
     Message: 'User deleted',

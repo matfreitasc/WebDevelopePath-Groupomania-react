@@ -11,20 +11,10 @@ export default function Profile() {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
   const [posts, setPosts] = useState([]);
-  const [userBio, setUserBio] = useState('');
-  const [userImage, setUserImage] = useState('');
-  const [userBanner, setUserBanner] = useState('');
-  const [userId, setUserId] = useState('');
-
-  useEffect(() => {
-    if (auth) {
-      setUserId(auth?.userId);
-      setUserBio(auth?.bio);
-      setUserImage(auth?.profilePicture);
-      setUserBanner(auth?.bannerPicture);
-    }
-    console.log(auth);
-  }, [auth]);
+  const [userBio, setUserBio] = useState(auth?.bio);
+  const [userImage] = useState(auth?.profilePicture);
+  const [userBanner, setUserBanner] = useState(auth?.profileBanner);
+  const [userId, setUserId] = useState(auth?.userId);
 
   useEffect(() => {
     if (userId) {
@@ -47,36 +37,20 @@ export default function Profile() {
       <main className='mx-auto flex-col max-w-xl mt-5'>
         <div className='rounded-lg shadow-md h-60'>
           <div className='h-full px-auto'>
-            {!userBanner || userBanner === null ? (
-              <img
-                src='https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg'
-                alt='background'
-                className='w-full object-cover object-center rounded-md shadow-md'
-              />
-            ) : (
-              <img
-                src={userBanner}
-                alt='background'
-                className='w-full object-cover object-center rounded-md shadow-md'
-              />
-            )}
+            <img
+              alt='background'
+              className='w-full object-cover object-center rounded-md shadow-md'
+              src={userBanner}
+            />
           </div>
           <div className='rounded-b-md relative top-[-95px] bg-white pb-2'>
             <div className='rounded-b-md px-5 pb-2 bg-transparent space-y-3  '>
               <div className=' w-16 h-16 mr-auto bg-white border-logoOrange border-2 rounded-full bottom-[2rem] relative'>
-                {!userImage || userImage === null ? (
-                  <img
-                    className='w-full h-full object-cover object-center rounded-full'
-                    src='https://media.istockphoto.com/photos/very-closeup-view-of-amazing-domestic-pet-in-mirror-round-fashion-is-picture-id1281804798?k=20&m=1281804798&s=612x612&w=0&h=gN9-n0NVMyyQ0GYYoEqPSPCXVZwkCZbRummxgqhxOIU='
-                    alt='Default user is a cat'
-                  />
-                ) : (
-                  <img
-                    className='w-full h-full object-cover object-center rounded-full'
-                    src={userImage}
-                    alt='Default user is a cat'
-                  />
-                )}
+                <img
+                  className='w-full h-full object-cover object-center rounded-full'
+                  src={userImage}
+                  alt='Default user is a cat'
+                />
               </div>
 
               <div className='grid col-1 bg-white h-16 '>

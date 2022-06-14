@@ -1,31 +1,32 @@
 import { React, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
 import Navbar from '../../Components/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import DeleteModal from '../../Components/layout/DeleteModal';
-import axios from '../../api/axios';
+import ReponseModal from '../../Components/ResponseModal';
 
 export default function Profile() {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
   const [username, setUsername] = useState(auth.username);
-  const [userId, setUserId] = useState(auth.userId);
+  const [userId] = useState(auth.userId);
   const [userAvatar, setUserAvatar] = useState(auth.profilePicture);
   const [preview, setPreview] = useState();
   const [userEmail, setUserEmail] = useState(auth.email);
   const [password, setPassword] = useState(auth?.password);
-  const [name, setName] = useState(auth.name);
+  const [passwordAgain, setPasswordAgain] = useState(auth?.password);
+  const [name, setName] = useState(auth?.name);
   const [openModal, setOpenModal] = useState(false);
+  const [resMessage, setResMessage] = useState();
+  const [resStatus, setResStatus] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('username', username);
-    formData.append('userEmail', userEmail);
+    formData.append('email', userEmail);
     formData.append('name', name);
     formData.append('image', userAvatar);
-    console.log(formData);
     await axiosPrivate
       .put(
         `/auth/user/${userId}`,
@@ -44,7 +45,10 @@ export default function Profile() {
         setUsername(res.data.username);
         setUserEmail(res.data.email);
         setUserAvatar(res.data.profilePicture);
-
+        setResMessage(res.data.message);
+        setResStatus(res.data.resStatus);
+        setPassword('');
+        setPasswordAgain('');
         setAuth({
           ...auth,
           username: res.data.username,
@@ -56,7 +60,6 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    console.log(auth);
     if (!userAvatar || !userAvatar.name || !auth.profilePicture === null) {
       setPreview(undefined);
       return;
@@ -82,7 +85,11 @@ export default function Profile() {
   return (
     <>
       <Navbar />
-
+      <ReponseModal
+        resMessage={resMessage}
+        open={resStatus}
+        setOpen={setResStatus}
+      />
       <section className='h-screen bg-opacity-50 w-full mt-8'>
         <form className='container mx-auto shadow-md md:w-3/4 bg-white dark:bg-gray-900'>
           <div className='max-w-sm mx-auto md:w-full md:mx-0'>
@@ -90,13 +97,13 @@ export default function Profile() {
               <p className='block relative'>
                 {preview ? (
                   <img
-                    className='mx-auto mt-10 object-cover rounded-full h-20 w-20'
+                    className='mx-auto mt-10 object-cover rounded-full h-20 w-24'
                     src={preview}
                     alt='avatar'
                   />
                 ) : (
                   <img
-                    className='mx-auto mt-10 object-cover rounded-full h-20 w-20 '
+                    className='mx-auto mt-10 object-cover rounded-full h-20 w-24 '
                     src={userAvatar}
                     alt='avatar'
                   />
@@ -185,12 +192,24 @@ export default function Profile() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+
+                  <input
+                    type='password'
+                    id='user-info-password-confirm'
+                    className='mt-2 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-6 bg-white text-gray-700 placeholder-gray-400 shadow-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent dark:focus:ring-logoOrange '
+                    placeholder='Confirm password'
+                    value={passwordAgain}
+                    onChange={(e) => setPasswordAgain(e.target.value)}
+                  />
                 </div>
               </div>
               <div className='max-w-sm mx-auto space-y-5 md:w-5/12 md:pl-5 md:inline-flex'>
                 <button
                   type='button'
-                  className='py-2 px-4  bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
+                  className='disabled:bg-slate-500 py-2 px-4 bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 focus:text-white text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
+                  disabled={
+                    password !== passwordAgain ? true : false || !password
+                  }
                   onClick={handleSubmit}
                 >
                   Change
@@ -211,7 +230,12 @@ export default function Profile() {
                   Delete Account
                 </button>
                 {openModal && (
-                  <DeleteModal userId={userId} closeModal={setOpenModal} />
+                  <DeleteModal
+                    userId={userId}
+                    openModal={openModal}
+                    setOpenModal={setOpenModal}
+                    setAuth={setAuth}
+                  />
                 )}
               </div>
             </div>

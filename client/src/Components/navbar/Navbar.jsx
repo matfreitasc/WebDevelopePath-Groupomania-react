@@ -28,7 +28,6 @@ export default function Main() {
       setUserId(auth.userId);
       setUserImage(auth.profilePicture);
     }
-    console.log('navbar', auth);
   }, [auth]);
 
   return (
@@ -48,19 +47,11 @@ export default function Main() {
                 <div>
                   <Menu.Button className='bg-gray-800 flex text-sm  ring-2 ring-white dark:ring-logoOrange rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white z-20'>
                     <span className='sr-only'>Open user menu</span>
-                    {!userImage || userImage === null ? (
-                      <img
-                        className='w-8 h-8 object-cover object-center rounded-full'
-                        src='https://media.istockphoto.com/photos/very-closeup-view-of-amazing-domestic-pet-in-mirror-round-fashion-is-picture-id1281804798?k=20&m=1281804798&s=612x612&w=0&h=gN9-n0NVMyyQ0GYYoEqPSPCXVZwkCZbRummxgqhxOIU='
-                        alt='Default user is a cat'
-                      />
-                    ) : (
-                      <img
-                        className='w-8 h-8 object-cover object-center rounded-full'
-                        src={userImage}
-                        alt='Default user is a cat'
-                      />
-                    )}
+                    <img
+                      className='w-8 h-8 object-cover object-center rounded-full'
+                      src={userImage}
+                      alt='Default user is a cat'
+                    />
                   </Menu.Button>
                 </div>
                 <Transition
