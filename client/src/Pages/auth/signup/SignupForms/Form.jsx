@@ -15,6 +15,7 @@ function Form() {
   const [username, setUsername] = useState('');
   const [profile_image, setProfileImage] = useState('');
   const [notValid, setNotValid] = useState(Boolean);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,22 +24,25 @@ function Form() {
     formData.append('password', password);
     formData.append('name', name);
     formData.append('username', username);
-    formData.append('profile_image', profile_image);
-
-    await axios
-      .post('/auth/signup/', formData, {
+    formData.append('image', profile_image);
+    try {
+      const response = await axios.post('/auth/signup/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
-      })
-      .then((res) => {
-        setAuth(res);
-        navigate('/');
-        console.log(res);
       });
+      setAuth(response.data);
+      navigate('/');
+    } catch (error) {
+      console.log(
+        '🚀 ~ file: Form.jsx ~ line 36 ~ handleSubmit ~ error',
+        error
+      );
+      setError(error.message);
+    }
   };
 
   const [page, setPage] = useState(0);
-  const [formTitles, setFormTitles] = useState(['Sign up', 'Profile']);
+  const [formTitles] = useState(['Sign up', 'Profile']);
   const PageDisplay = () => {
     switch (page) {
       case 0:
@@ -62,6 +66,7 @@ function Form() {
             setUsername={setUsername}
             profile_image={profile_image}
             setProfileImage={setProfileImage}
+            error={error}
           />
         );
     }
@@ -73,7 +78,7 @@ function Form() {
         <div className='flex items-center justify-center flex-col space-y-8'>
           <LogoWithName className='dark:fill-[#e94425] ' />
           <section className='w-full'>
-            <p className='flex items-center flex-col font-medium text-indigo-600 hover:text-indigo-500 dark:text-white ml-2'>
+            <p className='flex items-center flex-col font-medium  dark:text-white ml-2'>
               Already have an account?
               <a
                 href='/login'
@@ -83,6 +88,14 @@ function Form() {
               </a>
             </p>
           </section>
+          <p
+            className={
+              error ? 'w-full text-red border-2 border-red-700' : 'sr-only'
+            }
+            aria-live='assertive'
+          >
+            {error}
+          </p>
           <section className='flex items-center  flex-col  w-full'>
             <div id='FormBody' className=' max-w-md w-full'>
               {PageDisplay()}
@@ -113,6 +126,7 @@ function Form() {
                   <button
                     disabled={notValid}
                     className='border p-2  px-20 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                    onClick={handleSubmit}
                   >
                     Submit
                   </button>

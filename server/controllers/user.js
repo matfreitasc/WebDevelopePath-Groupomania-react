@@ -7,8 +7,15 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
-  const username = genUsername.generateUsername();
+  const url = req.protocol + '://' + req.get('host');
+  const { email, password, name, username } = req.body;
+  console.log(
+    '🚀 ~ file: user.js ~ line 13 ~ exports.register= ~ req.body',
+    req.body
+  );
+  if (username === '' || username === null || username === undefined) {
+    username = genUsername.generateUsername();
+  }
   if (!email || !password) {
     return res.status(400).json({
       message: 'Please provide email and password',
@@ -24,6 +31,7 @@ exports.register = async (req, res) => {
       message: 'User already registered, please login',
     });
   }
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -31,8 +39,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       username,
-      profile_image:
-        'https://media.istockphoto.com/photos/very-closeup-view-of-amazing-domestic-pet-in-mirror-round-fashion-is-picture-id1281804798?k=20&m=1281804798&s=612x612&w=0&h=gN9-n0NVMyyQ0GYYoEqPSPCXVZwkCZbRummxgqhxOIU=',
+      profile_image: url + '/images/' + req.file.filename,
       profile_banner:
         'https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg',
     });
@@ -95,8 +102,8 @@ exports.login = async (req, res) => {
 
   if (!user) {
     return res.status(401).json({
-      Success: false,
-      Message: 'User not found',
+      success: false,
+      message: 'User not found',
     });
   }
   bcrypt.compare(password, user.password).then((result) => {
@@ -145,8 +152,8 @@ exports.login = async (req, res) => {
       });
     } else {
       res.status(401).json({
-        Success: false,
-        Message: 'Email or Password incorrect',
+        success: false,
+        message: 'Email or Password incorrect',
       });
     }
   });

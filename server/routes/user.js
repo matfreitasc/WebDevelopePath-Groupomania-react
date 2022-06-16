@@ -5,7 +5,7 @@ const userController = require('../controllers/user');
 const multer = require('../middlewares/multer-config');
 const auth = require('../middlewares/verifyJWT');
 
-router.post('/signup', userController.register);
+router.post('/signup', multer, userController.register);
 router.post('/login', userController.login);
 router.get('/refresh', userController.refreshToken);
 router.get('/logout', userController.logout);

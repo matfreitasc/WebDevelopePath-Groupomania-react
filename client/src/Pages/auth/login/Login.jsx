@@ -9,6 +9,7 @@ import useAuth from '../../../hooks/useAuth';
 export default function Login() {
   const { auth, setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState('');
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
 
@@ -38,10 +39,13 @@ export default function Login() {
       navigate(from, { replace: true });
     } catch (error) {
       if (!error || !error.response) {
+        setError(error.response.data.message);
         console.log('Error: ', error.message);
       } else if (error.response.status === 400) {
+        setError(error.response.data.message);
         console.log('Missing email or password');
       } else {
+        setError(error.response.data.message);
         console.log('Error: ', error.response.data);
       }
     }
@@ -73,6 +77,14 @@ export default function Login() {
                   Signup today
                 </a>
               </div>
+              <p
+                className={
+                  error ? 'w-full text-red border-2 border-red-700' : 'sr-only'
+                }
+                aria-live='assertive'
+              >
+                {error}
+              </p>
             </section>
           </div>
           <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
@@ -128,15 +140,6 @@ export default function Login() {
                 >
                   Remember me
                 </label>
-              </div>
-
-              <div className='text-sm'>
-                <a
-                  href='#'
-                  className='font-medium text-indigo-600 hover:text-indigo-500'
-                >
-                  Forgot your password?
-                </a>
               </div>
             </div>
 

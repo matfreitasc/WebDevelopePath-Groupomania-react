@@ -5,6 +5,7 @@ const MIME_TYPE_MAP = {
   'image/jpeg': 'jpg',
   'image/jpg': 'jpg',
   'image/gif': 'gif',
+  'image/webp': 'webp',
 };
 
 const storage = multer.diskStorage({
@@ -17,5 +18,4 @@ const storage = multer.diskStorage({
     callback(null, name + '-' + Date.now() + '.' + extension);
   },
 });
-
 module.exports = multer({ storage: storage }).single('image');
