@@ -5,7 +5,7 @@ import { axiosPrivate } from '../../api/axios';
 import Moment from 'moment';
 import Like from '../../Components/layout/likeSystem/Like';
 import useAuth from '../../hooks/useAuth';
-import Modal from '../../Components/modal/CreatePost';
+import CreatePost from '../../Components/layout/CreatePost';
 import Viewed from '../../Components/layout/viewedSystem/Viewed';
 
 function Posts() {
@@ -53,16 +53,16 @@ function Posts() {
 
   return (
     <main>
-      <Modal />
-      <div className='min-w-[350px] overflow-x-hidden '>
+      <CreatePost />
+      <div className='overflow-x-hidden'>
         {posts.map((post) => (
           <div key={post.id}>
-            <div className='container mx-auto flex justify-center mt-5 '>
-              <div className='w-4/6 relative mb-2'>
+            <div className='mt-5 '>
+              <div className='relative mb-2'>
                 <div className='shadow sm:rounded-md sm:overflow-hidden'>
                   <div className='px-5 py-2 bg-white dark:bg-gray-900 space-y-3  '>
                     <div className='flex justify-between'>
-                      <div>
+                      <section>
                         <div
                           className='text-xs mb-2 dark:text-gray-400 block'
                           onClick={() => {
@@ -86,7 +86,7 @@ function Posts() {
                           postUserId={post.userId}
                           date={post.createdAt}
                         />
-                      </div>
+                      </section>
 
                       <Menu>
                         {userId === post.userId ? (

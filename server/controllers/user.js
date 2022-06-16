@@ -1,24 +1,22 @@
-const genUsername = require('unique-username-generator');
-
 const { User, Posts } = require('../models/');
 require('dotenv').config();
 
 const bcrypt = require('bcrypt');
+``;
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
   const url = req.protocol + '://' + req.get('host');
   const { email, password, name, username } = req.body;
-  console.log(
-    '🚀 ~ file: user.js ~ line 13 ~ exports.register= ~ req.body',
-    req.body
-  );
-  if (username === '' || username === null || username === undefined) {
-    username = genUsername.generateUsername();
-  }
+
   if (!email || !password) {
     return res.status(400).json({
       message: 'Please provide email and password',
+    });
+  }
+  if (!name || !username || !req.file) {
+    return res.status(400).json({
+      message: 'Please provide name, username and profile picture',
     });
   }
   const user = await User.findOne({
@@ -34,9 +32,9 @@ exports.register = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = await User.create({
       email,
+      name,
       password: hashedPassword,
       username,
       profile_image: url + '/images/' + req.file.filename,

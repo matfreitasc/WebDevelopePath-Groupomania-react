@@ -34,19 +34,19 @@ function ProfileInfo({ setName, setUsername, profile_image, setProfileImage }) {
     <section>
       <form className='dark:text-white flex flex-col gap-2'>
         <div className='flex justify-center items-center w-full relative'>
-          <label
-            for='profile_image'
-            className='flex flex-col justify-center items-center '
-          >
+          <label className='flex flex-col justify-center items-center '>
             <div className='flex flex-col justify-center items-center pt-5 pb-6 z-0 '>
-              <img
-                src={preview}
-                alt='profile_image'
-                className='h-32 w-32 rounded-full ring-2 overflow-hidden text-transparent dark:ring-white z-0'
-              />
+              <div className='h-32 w-32 rounded-full ring-2 overflow-hidden bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:ring-white z-0 '>
+                <img
+                  src={preview}
+                  alt='profileImage'
+                  className='h-full object-cover object-center bg-no-repeat text-transparent'
+                />
+              </div>
               <p className='mt-4'>Click here to upload your profile picture</p>
             </div>
             <input
+              required
               id='profile_image'
               type='file'
               className='hidden z-0 '
@@ -80,12 +80,14 @@ function ProfileInfo({ setName, setUsername, profile_image, setProfileImage }) {
         <label>Name</label>
         <input
           type='text'
+          required
           onChange={(e) => setName(e.target.value)}
           className='rounded-xl text-gray-700'
         />
         <label>Username</label>
         <input
           type='text'
+          required
           onChange={(e) => setUsername(e.target.value)}
           className='rounded-xl text-gray-700'
         />

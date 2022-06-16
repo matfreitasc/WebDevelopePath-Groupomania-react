@@ -40,13 +40,10 @@ export default function Login() {
     } catch (error) {
       if (!error || !error.response) {
         setError(error.response.data.message);
-        console.log('Error: ', error.message);
       } else if (error.response.status === 400) {
         setError(error.response.data.message);
-        console.log('Missing email or password');
       } else {
         setError(error.response.data.message);
-        console.log('Error: ', error.response.data);
       }
     }
   };
@@ -59,7 +56,7 @@ export default function Login() {
 
   return (
     <>
-      <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 h-screen dark:bg-gray-900 '>
+      <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 h-screen  '>
         <div className='max-w-md w-full space-y-8'>
           <div>
             <div className='flex items-center justify-center'>
@@ -72,7 +69,7 @@ export default function Login() {
                 </p>
                 <a
                   href='/signup'
-                  className='font-medium text-indigo-600 hover:text-indigo-500 dark:text-white ml-2'
+                  className='font-medium text-indigo-600 hover:text-indigo-500 dark:text-white ml-2 dark:hover:text-indigo-500'
                 >
                   Signup today
                 </a>

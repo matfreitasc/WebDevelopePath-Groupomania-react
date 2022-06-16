@@ -6,17 +6,23 @@ const Toggle = () => {
   const { theme, setTheme } = React.useContext(ThemeContext);
 
   return (
-    <div className='transition duration-500 ease-in-out rounded-full p-2'>
+    <div className='transition duration-500 ease-in-out rounded-full w-full '>
       {theme === 'dark' ? (
-        <FaSun
+        <div
+          className='flex flex-row justify-between '
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className='text-gray-500 dark:text-yellow-400  cursor-pointer text-sm'
-        />
+        >
+          <p className='text-gray-700'>Light Mode</p>
+          <FaSun className='text-gray-700 dark:text-yellow-400   cursor-pointer text-xl' />
+        </div>
       ) : (
-        <FaMoon
+        <div
+          className='flex flex-row justify-between '
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className='text-gray-500 dark:text-gray-900  cursor-pointer text-sm'
-        />
+        >
+          <p className='text-gray-700'>Light Mode</p>
+          <FaMoon className='text-gray-700 dark:text-gray-900  cursor-pointer text-sm' />
+        </div>
       )}
     </div>
   );

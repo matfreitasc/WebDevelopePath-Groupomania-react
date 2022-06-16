@@ -4,9 +4,11 @@ import Navbar from '../../Components/navbar/Navbar';
 
 function Main() {
   return (
-    <div>
+    <div className=' overflow-x-hidden'>
       <Navbar />
-      <Posts />
+      <div className='flex flex-col m-auto max-w-4xl'>
+        <Posts />
+      </div>
     </div>
   );
 }

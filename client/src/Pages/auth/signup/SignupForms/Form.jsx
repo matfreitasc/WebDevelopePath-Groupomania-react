@@ -33,11 +33,11 @@ function Form() {
       setAuth(response.data);
       navigate('/');
     } catch (error) {
-      console.log(
-        '🚀 ~ file: Form.jsx ~ line 36 ~ handleSubmit ~ error',
-        error
-      );
-      setError(error.message);
+      console.log(error);
+      setError(error.response.data.message);
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
   };
 
@@ -73,7 +73,7 @@ function Form() {
   };
 
   return (
-    <section className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 h-screen dark:bg-gray-900 '>
+    <section className='min-h-full flex items-center justify-center px-4 sm:px-6 lg:px-8 h-screen my-4'>
       <div className='max-w-md w-full space-y-8 '>
         <div className='flex items-center justify-center flex-col space-y-8'>
           <LogoWithName className='dark:fill-[#e94425] ' />
@@ -82,75 +82,73 @@ function Form() {
               Already have an account?
               <a
                 href='/login'
-                className='font-medium text-indigo-600 hover:text-indigo-500 hover:underline hover:underline-offset-2'
+                className='font-medium text-indigo-600 hover:text-indigo-500 dark:text-white ml-2 dark:hover:text-indigo-500'
               >
                 Login
               </a>
             </p>
           </section>
-          <p
+          <div
             className={
-              error ? 'w-full text-red border-2 border-red-700' : 'sr-only'
+              error
+                ? 'rounded-xl p-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'
+                : 'sr-only'
             }
-            aria-live='assertive'
           >
-            {error}
-          </p>
+            <p
+              className='h-full text-red  bg-white text-center rounded-lg p-2 '
+              aria-live='assertive'
+            >
+              {error}
+            </p>
+          </div>
+
           <section className='flex items-center  flex-col  w-full'>
             <div id='FormBody' className=' max-w-md w-full'>
               {PageDisplay()}
             </div>
           </section>
-          <section className='w-full'>
-            <div
-              id='Form Footer'
-              className={page === 0 ? ' ' : 'flex justify-between'}
-            >
-              <div className=''>
-                {page !== 0 ? (
-                  <button
-                    className='min-w-fit p-2 px-16 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    disabled={page === 0}
-                    onClick={() => {
-                      setPage((page) => page - 1);
-                    }}
-                  >
-                    Previous Step
-                  </button>
-                ) : (
-                  <></>
-                )}
-              </div>
-              <div>
-                {page === formTitles.length - 1 ? (
-                  <button
-                    disabled={notValid}
-                    className='border p-2  px-20 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </button>
-                ) : page === 0 ? (
-                  <button
-                    className='w-full p-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    onClick={() => {
-                      setPage((page) => page + 1);
-                    }}
-                  >
-                    Next Step
-                  </button>
-                ) : (
-                  <button
-                    className='border p-2 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    onClick={() => {
-                      setPage((page) => page + 1);
-                    }}
-                  >
-                    Next Step
-                  </button>
-                )}
-              </div>
-            </div>
+          <section className='w-full flex flex-row justify-between gap-4'>
+            {page !== 0 ? (
+              <button
+                className='w-1/2 p-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                disabled={page === 0}
+                onClick={() => {
+                  setPage((page) => page - 1);
+                }}
+              >
+                Previous Step
+              </button>
+            ) : (
+              <></>
+            )}
+            {page === formTitles.length - 1 ? (
+              <button
+                disabled={notValid}
+                className='w-1/2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>
+            ) : page === 0 ? (
+              <button
+                className='w-full p-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                onClick={() => {
+                  setPage((page) => page + 1);
+                }}
+              >
+                Next Step
+              </button>
+            ) : (
+              <button
+                className='w-1/2 p-2 border  border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                onClick={() => {
+                  setPage((page) => page + 1);
+                }}
+              >
+                Next Step
+              </button>
+            )}
           </section>
         </div>
       </div>
