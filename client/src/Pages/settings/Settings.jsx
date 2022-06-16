@@ -11,7 +11,6 @@ export default function Profile() {
   const [username, setUsername] = useState(auth.username);
   const [userId] = useState(auth.userId);
   const [userAvatar, setUserAvatar] = useState(auth.profilePicture);
-  const [preview, setPreview] = useState();
   const [userEmail, setUserEmail] = useState(auth.email);
   const [password, setPassword] = useState(auth?.password);
   const [passwordAgain, setPasswordAgain] = useState(auth?.password);
@@ -59,19 +58,6 @@ export default function Profile() {
       });
   };
 
-  useEffect(() => {
-    if (!userAvatar || !userAvatar.name || !auth.profilePicture === null) {
-      setPreview(undefined);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(userAvatar);
-    setPreview(objectUrl);
-
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [userAvatar, auth.profilePicture]);
-
   const onSelectFile = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
       setUserAvatar(undefined);
@@ -90,34 +76,26 @@ export default function Profile() {
         open={resStatus}
         setOpen={setResStatus}
       />
-      <section className='h-screen bg-opacity-50 w-full mt-8'>
-        <form className='container mx-auto shadow-md md:w-3/4 bg-white dark:bg-gray-900'>
-          <div className='max-w-sm mx-auto md:w-full md:mx-0'>
-            <div className='inline-flex items-center space-x-4'>
-              <p className='block relative'>
-                {preview ? (
-                  <img
-                    className='mx-auto mt-10 object-cover rounded-full h-20 w-24'
-                    src={preview}
-                    alt='avatar'
-                  />
-                ) : (
-                  <img
-                    className='mx-auto mt-10 object-cover rounded-full h-20 w-24 '
-                    src={userAvatar}
-                    alt='avatar'
-                  />
-                )}
-              </p>
+      <section className='h-screen bg-opacity-50 w-full mt-8 '>
+        <form className='container mx-auto shadow-md md:w-3/4 bg-white dark:bg-gray-900 transition-all'>
+          <section className='flex flex-col items-center gap-4 '>
+            <label className='space-x-4 h-20 w-24 mt-4 '>
+              <img
+                className=' object-cover rounded-full h-24 w-24'
+                src={userAvatar}
+                alt='avatar'
+              />
               <input
                 type='file'
-                className='dark:text-white'
+                name='image'
+                className='dark:text-white sr-only'
                 onChange={onSelectFile}
               />
-            </div>
-          </div>
+            </label>
+            <p className='dark:text-white '>Click on the photo to edit </p>
+          </section>
 
-          <div className='space-y-2'>
+          <section className='space-y-2'>
             <div className='items-center w-full p-4 space-y-4 text-gray-500 md:inline-flex md:space-y-0 dark:text-white'>
               <h2 className='max-w-sm mx-auto md:w-1/3'>Personal info</h2>
               <div className='max-w-sm mx-auto space-y-5 md:w-2/3'>
@@ -180,9 +158,9 @@ export default function Profile() {
               </div>
             </div>
             <hr />
-            <div className='items-center w-full p-8 space-y-4 text-gray-500 md:inline-flex md:space-y-0 dark:text-white'>
-              <h2 className='max-w-sm mx-auto md:w-4/12'>Change password</h2>
-              <div className='max-w-sm mx-auto space-y-5 md:w-5/12 md:pl-5 md:inline-flex'>
+            <section className='items-center w-full p-2 space-y-4 text-gray-500 md:inline-flex md:space-y-0 dark:text-white'>
+              <h2 className='max-w-sm mx-auto md:w-4/12 '>Change password</h2>
+              <div className='max-w-sm mx-auto space-y-5  md:w-5/12 md:pl-5 md:inline-flex'>
                 <div className=' relative '>
                   <input
                     type='password'
@@ -215,10 +193,15 @@ export default function Profile() {
                   Change
                 </button>
               </div>
-            </div>
+            </section>
             <hr />
-            <div className='flex items-center justify-between w-full p-8 space-y-4 text-gray-500 md:inline-flex md:space-y-0 dark:text-white'>
-              <h2 className='w-fit'>Delete Account</h2>
+            <section className='flex items-center flex-col justify-between md:w-full md:flex-row p-2 space-y-4 text-gray-500  md:inline-flex md:space-y-0 dark:text-white'>
+              <h2
+                className='sr-only md:not-sr-only'
+                aria-label='Delete Account'
+              >
+                Delete Account
+              </h2>
               <div className='text-center w-4/12  max-w-sm'>
                 <button
                   type='button'
@@ -238,7 +221,7 @@ export default function Profile() {
                   />
                 )}
               </div>
-            </div>
+            </section>
 
             <hr />
             <div className='w-full px-4 pb-4 ml-auto text-gray-500 md:w-1/3'>
@@ -250,7 +233,7 @@ export default function Profile() {
                 Save
               </button>
             </div>
-          </div>
+          </section>
         </form>
       </section>
     </>
