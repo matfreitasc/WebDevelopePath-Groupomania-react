@@ -77,16 +77,28 @@ function ProfileInfo({ setName, setUsername, profile_image, setProfileImage }) {
             ''
           )}
         </div>
-        <label>Name</label>
+        <label>
+          Name<span className='text-red-700'>*</span>
+        </label>
         <input
           type='text'
+          id='name'
+          placeholder='Name'
+          aria-describedby='nameNote'
+          aria-label='Name input'
           required
           onChange={(e) => setName(e.target.value)}
           className='rounded-xl text-gray-700'
         />
-        <label>Username</label>
+        <label>
+          Username <span className='text-red-700'>*</span>
+        </label>
         <input
           type='text'
+          id='username'
+          placeholder='Username'
+          aria-label='Username input'
+          aria-describedby='usernameNote'
           required
           onChange={(e) => setUsername(e.target.value)}
           className='rounded-xl text-gray-700'

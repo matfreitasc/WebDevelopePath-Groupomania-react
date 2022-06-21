@@ -1,5 +1,5 @@
-import { React, useState, useEffect } from 'react';
-import Navbar from '../../Components/navbar/Navbar';
+import { React, useState } from 'react';
+import Navbar from '../../Components/layout/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import DeleteModal from '../../Components/layout/DeleteModal';
@@ -8,10 +8,11 @@ import ReponseModal from '../../Components/ResponseModal';
 export default function Profile() {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
-  const [username, setUsername] = useState(auth.username);
+  const [username, setUsername] = useState(auth?.username);
   const [userId] = useState(auth.userId);
-  const [userAvatar, setUserAvatar] = useState(auth.profilePicture);
-  const [userEmail, setUserEmail] = useState(auth.email);
+  const [userAvatar, setUserAvatar] = useState(auth?.profilePicture);
+  const [avatarPreview, setAvatarPreview] = useState('');
+  const [userEmail, setUserEmail] = useState(auth?.email);
   const [password, setPassword] = useState(auth?.password);
   const [passwordAgain, setPasswordAgain] = useState(auth?.password);
   const [name, setName] = useState(auth?.name);
@@ -59,13 +60,10 @@ export default function Profile() {
   };
 
   const onSelectFile = (e) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setUserAvatar(undefined);
-      return;
+    if (e.target.files[0]) {
+      setUserAvatar(e.target.files[0]);
+      setAvatarPreview(URL.createObjectURL(e.target.files[0]));
     }
-
-    // I've kept this example simple by using the first image instead of multiple
-    setUserAvatar(e.target.files[0]);
   };
 
   return (
@@ -80,11 +78,19 @@ export default function Profile() {
         <form className='container mx-auto shadow-md md:w-3/4 bg-white dark:bg-gray-900 transition-all'>
           <section className='flex flex-col items-center gap-4 '>
             <label className='space-x-4 h-20 w-24 mt-4 '>
-              <img
-                className=' object-cover rounded-full h-24 w-24'
-                src={userAvatar}
-                alt='avatar'
-              />
+              {!avatarPreview ? (
+                <img
+                  className=' object-cover rounded-full h-24 w-24'
+                  src={userAvatar}
+                  alt='avatar'
+                />
+              ) : (
+                <img
+                  className=' object-cover rounded-full h-24 w-24'
+                  src={avatarPreview}
+                  alt='Avatar Preview'
+                />
+              )}
               <input
                 type='file'
                 name='image'

@@ -52,9 +52,9 @@ function Posts() {
   }, [navigate, location]);
 
   return (
-    <main>
+    <main className=''>
       <CreatePost />
-      <div className='overflow-x-hidden'>
+      <div className='overflow-x-hidden max-w-3xl'>
         {posts.map((post) => (
           <div key={post.id}>
             <div className='mt-5 '>

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Fragment, useState, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
-import useLogout from '../../hooks/useLogout';
-import useAuth from '../../hooks/useAuth';
-import Toggle from '../ThemeToggle';
-import LogoWithName from '../../assets/images/LogoWithName';
+import useLogout from '../../../hooks/useLogout';
+import useAuth from '../../../hooks/useAuth';
+import Toggle from '../../ThemeToggle';
+import LogoWithName from '../../../assets/images/LogoWithName';
 
 const navigation = [{ name: 'Dashboard', href: '#', current: true }];
 
@@ -96,7 +96,7 @@ export default function Main() {
                     </Menu.Item>
                     <Menu.Item>
                       <div className='flex flex-row py-2 px-4 justify-between items-center text-sm'>
-                        <Toggle />
+                        <Toggle className='text-gray-700' />
                       </div>
                     </Menu.Item>
                     <Menu.Item>

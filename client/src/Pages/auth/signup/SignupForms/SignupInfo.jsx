@@ -52,9 +52,9 @@ function SignUpInfo({
       >
         {error}
       </p>
-      <form className=''>
+      <form>
         <label htmlFor='email-address' className={'dark:text-white'}>
-          Email
+          Email<span className='text-red-700'>*</span>
         </label>
         <input
           id='email-address'
@@ -87,7 +87,7 @@ function SignUpInfo({
         </p>
 
         <label htmlFor='password' className=' dark:text-white'>
-          Password
+          Password <span className='text-red-700'>*</span>
         </label>
         <input
           id='password'
@@ -97,7 +97,7 @@ function SignUpInfo({
           className='mb-4 appearance-none   relative block w-full px-3 py-2 border rounded-xl border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
           placeholder='Password'
           aria-invalid={validPwd ? 'false' : 'true'}
-          aria-describedby='unidnote'
+          aria-describedby='pwdnote'
           onFocus={() => setPwdFocus(true)}
           onBlur={() => setPwdFocus(false)}
           onChange={(e) => {
@@ -105,9 +105,9 @@ function SignUpInfo({
           }}
         />
         <p
-          id='uidnote'
+          id='pwdnote'
           className={
-            pwdFocus && password && !validPwd
+            pwdFocus && !validPwd
               ? 'dark:text-white text-center p-2 border-2 border-red rounded-md my-2 '
               : 'sr-only'
           }
@@ -134,32 +134,34 @@ function SignUpInfo({
           className='appearance-none  relative block w-full px-3 py-2 border rounded-xl  border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
           placeholder='Password'
           aria-invalid={validMatch ? 'false' : 'true'}
-          aria-describedby='unidnote'
+          aria-describedby='confirmnote'
           onFocus={() => setPwdFocus(true)}
           onBlur={() => setPwdFocus(false)}
           onChange={(e) => {
             setConfirmPwd(e.target.value);
           }}
         />
-        {!validPwd ? (
+        {!validMatch ? (
           <p
-            id='unidnote'
+            id='pwdconfirmnotenote'
             className={
-              pwdFocus && password && !validPwd
-                ? 'dark:text-white text-center p-2 border-2 border-red rounded-md my-2 '
+              confirmPwd && !validMatch
+                ? 'dark:text-white text-center p-2 border-2 border-red rounded-md my-2 border-red-700'
                 : 'sr-only'
             }
+            aria-live='assertive'
           >
             Passwords do not match.
           </p>
         ) : (
           <p
-            id='unidnote'
+            id='confirmnote'
             className={
-              pwdFocus && password && !validPwd
-                ? 'dark:text-white text-center p-2 border-2 border-red rounded-md my-2 '
+              pwdFocus && password && validMatch
+                ? 'dark:text-white text-center p-2 border-2 border-red rounded-md my-2 border-green-700'
                 : 'sr-only'
             }
+            aria-live='assertive'
           >
             Passwords match.
           </p>

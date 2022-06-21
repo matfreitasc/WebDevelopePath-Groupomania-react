@@ -4,7 +4,7 @@ import RequireAuth from './Components/requireAuth/RequireAuth';
 import Main from './Pages/main/Main';
 import Post from './Components/postPage/Post';
 import Login from './Pages/auth/login/Login';
-import Signup from './Pages/auth/signup/Signup';
+import Form from './Pages/auth/signup/SignupForms/Form';
 import Profile from './Pages/profile/Profile';
 import Settings from './Pages/settings/Settings';
 import Layout from './Components/layout/Layout';
@@ -19,7 +19,7 @@ function App() {
         <Route path='/' element={<Layout />}>
           {/* Public Routes */}
           <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
+          <Route path='/signup' element={<Form />} />
 
           {/* Protected Routes */}
           <Route element={<PersistLogin />}>

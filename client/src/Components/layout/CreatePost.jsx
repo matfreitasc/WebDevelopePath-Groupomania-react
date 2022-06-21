@@ -91,7 +91,7 @@ export default function Modal() {
   };
   return (
     <section className='w-full relative inline-block align-bottom bg-white rounded-lg  overflow-hidden shadow-xl transform transition-all '>
-      <div className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
+      <section className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
         <form encType='multipart/form-data'>
           <div className='mt-2'>
             <label
@@ -112,7 +112,7 @@ export default function Modal() {
               />
             </div>
           </div>
-          <div className='mt-2'>
+          <section className='mt-2'>
             <label
               htmlFor='content'
               className='block text-sm font-medium leading-5 text-gray-700'
@@ -126,11 +126,11 @@ export default function Modal() {
                 type='text'
                 value={content}
                 required
-                className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                className='resize-y appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
-          </div>
+          </section>
           <div className='mt-2 '>
             {selected_Images[0] ? (
               <button
@@ -152,9 +152,9 @@ export default function Modal() {
             )}
             <div
               {...getRootProps()}
-              className='mt-2 cursor-pointer flex justify-center p-2 border-2 border-gray-300 border-dashed rounded-md z-0 relative'
+              className=' mt-2 cursor-pointer flex justify-center p-2 border-2 border-gray-300 border-dashed rounded-md z-0 relative'
             >
-              <div className='space-y-1 text-center'>
+              <div className='space-y-1 text-center '>
                 <input {...getInputProps()} />
                 {isDragReject && (
                   <div className='text-red-500 text-center'>
@@ -165,7 +165,7 @@ export default function Modal() {
                   </div>
                 )}
                 {isDragActive && (
-                  <div className='text-center'>
+                  <div className='text-center '>
                     <p className='text-sm font-medium'>
                       Drop files here to upload.
                     </p>
@@ -188,7 +188,7 @@ export default function Modal() {
                           strokeLinejoin='round'
                         />
                       </svg>
-                      <div className='flex text-sm text-gray-600'>
+                      <div className='flex text-sm text-gray-600 sr-only sm:not-sr-only'>
                         <p className='pl-1'>
                           Drag 'n' drop images here, or click to{' '}
                           <label className='inline-block bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500'>
@@ -197,18 +197,18 @@ export default function Modal() {
                         </p>
                       </div>
                       <p className='text-xs text-gray-500'>
-                        PNG, JPG, GIF up to 10MB
+                        Supported Files types: PNG, JPG, GIF up to 10MB
                       </p>
                     </div>
                   </Fragment>
                 )}
-                {selected_Images}
               </div>
+              {selected_Images}
             </div>
           </div>
         </form>
-      </div>
-      <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
+      </section>
+      <section className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
         <button
           type='button'
           className='w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm'
@@ -223,7 +223,7 @@ export default function Modal() {
         >
           Cancel
         </button>
-      </div>
+      </section>
     </section>
   );
 }

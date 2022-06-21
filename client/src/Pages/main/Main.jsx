@@ -1,14 +1,14 @@
 import React from 'react';
 import Posts from './Posts';
-import Navbar from '../../Components/navbar/Navbar';
+import Navbar from '../../Components/layout/navbar/Navbar';
 
 function Main() {
   return (
-    <div className=' overflow-x-hidden'>
+    <div className='overflow-x-hidden'>
       <Navbar />
-      <div className='flex flex-col m-auto max-w-4xl  mt-2 transition-all md:mt-10 '>
+      <section className='w-full flex justify-evenly mt-2 transition-all px-2'>
         <Posts />
-      </div>
+      </section>
     </div>
   );
 }

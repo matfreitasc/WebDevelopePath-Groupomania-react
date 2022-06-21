@@ -1,13 +1,13 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
 import LogoWithName from '../../../assets/images/LogoWithName';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ReactComponent as Logo } from '../../../assets/images/icon-left-font-monochrome-black.svg';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../../api/axios';
 import useAuth from '../../../hooks/useAuth';
+import Toggle from '../../../Components/ThemeToggle';
 
 export default function Login() {
-  const { auth, setAuth, persist, setPersist } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const location = useLocation();
@@ -55,9 +55,12 @@ export default function Login() {
   }, [persist]);
 
   return (
-    <>
+    <section>
       <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 h-screen  '>
         <div className='max-w-md w-full space-y-8'>
+          <div className=' max-w-fit absolute top-0 right-0 p-2'>
+            <Toggle className='text-gray-700 dark:text-white' />
+          </div>
           <div>
             <div className='flex items-center justify-center'>
               <LogoWithName className='dark:fill-[#e94425] ' />
@@ -74,9 +77,12 @@ export default function Login() {
                   Signup today
                 </a>
               </div>
+              <br />
               <p
                 className={
-                  error ? 'w-full text-red border-2 border-red-700' : 'sr-only'
+                  error
+                    ? 'rounded-xl p-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white text-center text-sm'
+                    : 'sr-only'
                 }
                 aria-live='assertive'
               >
@@ -86,9 +92,9 @@ export default function Login() {
           </div>
           <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
             <input type='hidden' name='remember' defaultValue='true' />
-            <div className='rounded-md shadow-sm -space-y-px'>
+            <div className='rounded-md shadow-sm space-y-4'>
               <div>
-                <label htmlFor='email-address' className='sr-only'>
+                <label htmlFor='email-address' className='dark:text-white'>
                   Email address
                 </label>
                 <input
@@ -97,13 +103,13 @@ export default function Login() {
                   type='email'
                   autoComplete='off'
                   required
-                  className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+                  className='appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                   placeholder='Email address'
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
-                <label htmlFor='password' className='sr-only'>
+                <label htmlFor='password' className='dark:text-white'>
                   Password
                 </label>
                 <input
@@ -112,7 +118,7 @@ export default function Login() {
                   type='password'
                   autoComplete='off'
                   required
-                  className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+                  className='appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                   placeholder='Password'
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -157,6 +163,6 @@ export default function Login() {
           </form>
         </div>
       </div>
-    </>
+    </section>
   );
 }

@@ -1,7 +1,7 @@
 import { React, useEffect, useState, Fragment } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import Navbar from '../../Components/navbar/Navbar';
+import Navbar from '../../Components/layout/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 import UserPost from '../../Components/layout/userposts/Post';
 
@@ -9,12 +9,12 @@ export default function Profile() {
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
-  const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
   const [posts, setPosts] = useState([]);
-  const [userBio, setUserBio] = useState(auth?.bio);
+  const [userBio] = useState(auth?.bio);
   const [userImage] = useState(auth?.profilePicture);
-  const [userBanner, setUserBanner] = useState(auth?.profileBanner);
-  const [userId, setUserId] = useState(auth?.userId);
+  const [userBanner] = useState(auth?.profileBanner);
+  const [userId] = useState(auth?.userId);
 
   useEffect(() => {
     if (userId) {
@@ -29,7 +29,7 @@ export default function Profile() {
           }
         });
     }
-  }, [userId]);
+  }, [axiosPrivate, userId, navigate, location]);
 
   return (
     <Fragment>

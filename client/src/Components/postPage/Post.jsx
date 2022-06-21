@@ -3,7 +3,7 @@ import { useEffect, Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import Navbar from '../../Components/navbar/Navbar';
+import Navbar from '../../Components/layout/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
 
 function Post() {
@@ -58,7 +58,7 @@ function Post() {
       controller.abort();
       isMounted = false;
     };
-  }, []);
+  }, [axiosPrivate, id, navigate, location]);
   const addComment = () => {
     axiosPrivate
       .post(
@@ -218,6 +218,14 @@ function Post() {
             </div>
 
             <div className='px-3 py-2 bg-white space-y-3 dark:bg-gray-900'>
+              {/* <div className='flex row justify-between'>
+                <Like userId={props.userId} postId={props.postId} />
+                <p className='dark:text-white'>
+                  {props.postViewes.length === 1
+                    ? props.postViewes.length + ' View'
+                    : props.postViewes.length + ' Viewes'}
+                </p>
+              </div> */}
               <p className='text-black font-semibold mb-1 dark:text-white'>
                 Comments
               </p>

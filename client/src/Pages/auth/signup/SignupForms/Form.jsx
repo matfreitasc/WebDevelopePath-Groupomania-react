@@ -5,16 +5,18 @@ import ProfileInfo from './ProfileInfo';
 import useAuth from './../../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../api/axios';
+import Toggle from '../../../../Components/ThemeToggle';
 
 function Form() {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+
   const [username, setUsername] = useState('');
   const [profile_image, setProfileImage] = useState('');
-  const [notValid, setNotValid] = useState(Boolean);
+  const [notValid, setNotValid] = useState(true);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -25,6 +27,9 @@ function Form() {
     formData.append('name', name);
     formData.append('username', username);
     formData.append('image', profile_image);
+    if (notValid) {
+      setError('Please fill out all fields');
+    }
     try {
       const response = await axios.post('/auth/signup/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -75,6 +80,9 @@ function Form() {
   return (
     <section className='min-h-full flex items-center justify-center px-4 sm:px-6 lg:px-8 h-screen my-4'>
       <div className='max-w-md w-full space-y-8 '>
+        <div className=' max-w-fit absolute top-0 right-0 p-2'>
+          <Toggle className='text-gray-700 dark:text-white cursor-pointer' />
+        </div>
         <div className='flex items-center justify-center flex-col space-y-8'>
           <LogoWithName className='dark:fill-[#e94425] ' />
           <section className='w-full'>
