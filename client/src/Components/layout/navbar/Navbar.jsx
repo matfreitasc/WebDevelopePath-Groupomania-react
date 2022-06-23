@@ -32,13 +32,13 @@ export default function Main() {
 
   return (
     <Disclosure as='nav' className='bg-gray-900  z-10'>
-      <>
+      <section>
         <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
           <div className='relative flex items-center justify-between h-16'>
             <div className='flex-1 flex items-stretch justify-start'>
               <div className='flex-shrink-0 flex items-center'>
                 <a href='/'>
-                  <LogoWithName className='ml-10 h-8 w-auto fill-white dark:fill-[#e94425] ' />
+                  <LogoWithName className='ml-2 h-8 w-auto fill-white dark:fill-[#e94425] ' />
                 </a>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function Main() {
             ))}
           </div>
         </Disclosure.Panel>
-      </>
+      </section>
     </Disclosure>
   );
 }

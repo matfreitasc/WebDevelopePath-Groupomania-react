@@ -201,32 +201,30 @@ export default function Profile() {
               </div>
             </section>
             <hr />
-            <section className='flex items-center flex-col justify-between md:w-full md:flex-row p-2 space-y-4 text-gray-500  md:inline-flex md:space-y-0 dark:text-white'>
+            <section className='flex align-middle sm:justify-between items-center w-full p-2  text-gray-500 md:inline-flex md:space-y-0 dark:text-white'>
               <h2
                 className='sr-only md:not-sr-only'
                 aria-label='Delete Account'
               >
                 Delete Account
               </h2>
-              <div className='text-center w-4/12  max-w-sm'>
-                <button
-                  type='button'
-                  className=' py-2 bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
-                  onClick={() => {
-                    setOpenModal(true);
-                  }}
-                >
-                  Delete Account
-                </button>
-                {openModal && (
-                  <DeleteModal
-                    userId={userId}
-                    openModal={openModal}
-                    setOpenModal={setOpenModal}
-                    setAuth={setAuth}
-                  />
-                )}
-              </div>
+              <button
+                type='button'
+                className=' mx-auto md:mx-0 p-2 bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-pink-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg '
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+              >
+                Delete Account
+              </button>
+              {openModal && (
+                <DeleteModal
+                  userId={userId}
+                  openModal={openModal}
+                  setOpenModal={setOpenModal}
+                  setAuth={setAuth}
+                />
+              )}
             </section>
 
             <hr />

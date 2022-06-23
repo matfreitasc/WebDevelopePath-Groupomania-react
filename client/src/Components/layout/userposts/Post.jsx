@@ -7,10 +7,6 @@ export default function UserPost(props) {
   const CreatedAt = Moment.utc(props.date).fromNow();
   const navigate = useNavigate();
 
-  const deletePost = async () => {
-    await axiosPrivate.delete(`/posts/${props.postId}`);
-  };
-
   const MarkAsViewed = () => {
     axiosPrivate.post(`/posts/${props.postId}/viewes`, {
       userId: props.userId,

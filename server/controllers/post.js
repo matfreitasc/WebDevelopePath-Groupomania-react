@@ -1,4 +1,4 @@
-const { Posts, Likes, Dislikes, Viewes } = require('../models/');
+const { Posts, Likes, Dislikes, Viewes, Comments } = require('../models/');
 
 exports.allPosts = async (req, res) => {
   const allPosts = await Posts.findAll({
@@ -13,18 +13,18 @@ exports.allPosts = async (req, res) => {
       {
         model: Viewes,
       },
+      {
+        model: Comments,
+      },
     ],
   });
-  res.send(allPosts);
+  res.json(allPosts);
 };
 
 exports.getOne = async (req, res) => {
-  // count viewes
   const view = await Viewes.count({
     where: { PostId: req.params.id },
   });
-  console.log(view);
-
   const post = await Posts.findOne({
     where: {
       id: req.params.id,
