@@ -5,6 +5,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Navbar from '../../Components/layout/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
+import Like from '../../Components/layout/likeSystem/Like';
 
 function Post() {
   const axiosPrivate = useAxiosPrivate();
@@ -13,6 +14,7 @@ function Post() {
   const { auth } = useAuth();
   const { id } = useParams();
   const [post, setPost] = useState({});
+  const [totalViews, setTotalViews] = useState(0);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
   const [userId] = useState(auth?.userId);
@@ -37,7 +39,8 @@ function Post() {
         const response = await axiosPrivate.get(`/posts/${id}`, {
           signal: controller.signal,
         });
-        isMounted && setPost(response.data);
+        isMounted && setPost(response.data.post);
+        isMounted && setTotalViews(response.data.view);
       } catch (err) {
         navigate('/login', { state: { from: location }, replace: true });
       }
@@ -84,7 +87,7 @@ function Post() {
     <div>
       <Navbar />
       <div className='container mx-auto flex justify-center mt-5'>
-        <div className='w-4/6 relative mb-10'>
+        <div className='relative mb-10'>
           <div className='shadow sm:rounded-md sm:overflow-hidden'>
             <div className='px-5 py-2 bg-white dark:bg-gray-900 space-y-3 '>
               <div className='flex justify-between'>
@@ -218,14 +221,17 @@ function Post() {
             </div>
 
             <div className='px-3 py-2 bg-white space-y-3 dark:bg-gray-900'>
-              {/* <div className='flex row justify-between'>
-                <Like userId={props.userId} postId={props.postId} />
-                <p className='dark:text-white'>
-                  {props.postViewes.length === 1
-                    ? props.postViewes.length + ' View'
-                    : props.postViewes.length + ' Viewes'}
-                </p>
-              </div> */}
+              {
+                <div className='flex row justify-between'>
+                  <Like userId={post.userId} postId={id} />
+
+                  <p className='dark:text-white'>
+                    {totalViews === 1
+                      ? totalViews + ' View'
+                      : totalViews + ' Viewes'}
+                  </p>
+                </div>
+              }
               <p className='text-black font-semibold mb-1 dark:text-white'>
                 Comments
               </p>

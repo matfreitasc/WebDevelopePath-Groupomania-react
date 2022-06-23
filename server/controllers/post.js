@@ -19,17 +19,26 @@ exports.allPosts = async (req, res) => {
 };
 
 exports.getOne = async (req, res) => {
+  // count viewes
+  const view = await Viewes.count({
+    where: { PostId: req.params.id },
+  });
+  console.log(view);
+
   const post = await Posts.findOne({
     where: {
       id: req.params.id,
     },
     include: [
       {
-        model: Viewes,
+        model: Likes,
+      },
+      {
+        model: Dislikes,
       },
     ],
   });
-  res.send(post);
+  res.json({ post, view });
 };
 
 exports.create = async (req, res) => {
