@@ -2,7 +2,6 @@ const { User, Posts } = require('../models/');
 require('dotenv').config();
 
 const bcrypt = require('bcrypt');
-``;
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
@@ -207,7 +206,6 @@ exports.refreshToken = async (req, res) => {
     },
   });
   if (!user) {
-    console.log('User not found');
     return res.status(403).json({
       Success: false,
       Message: 'User not found',

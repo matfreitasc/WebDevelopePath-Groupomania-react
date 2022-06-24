@@ -14,8 +14,6 @@ router.get('/:postId', async (req, res) => {
 });
 
 router.post('/', auth, async (req, res) => {
-  console.log('' + req.body);
-  console.log(req.userId);
   const comment = req.body;
   const username = req.username;
   const userId = req.userId;
