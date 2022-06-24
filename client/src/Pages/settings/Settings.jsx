@@ -25,6 +25,7 @@ export default function Profile() {
     const formData = new FormData();
     formData.append('username', username);
     formData.append('email', userEmail);
+    formData.append('password', password);
     formData.append('name', name);
     formData.append('image', userAvatar);
     await axiosPrivate

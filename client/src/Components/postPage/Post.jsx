@@ -90,7 +90,7 @@ function Post() {
     <div>
       <Navbar />
       <section className='mx-auto flex-col max-w-xl mt-5'>
-        <div className='shadow rounded-md overflow-hidden bg-white py-6'>
+        <div className='shadow rounded-md overflow-hidden bg-white dark:bg-slate-900 py-6'>
           <div className='px-5 py-2 dark:bg-gray-900 space-y-3 '>
             <div className='flex justify-between'>
               <div>
