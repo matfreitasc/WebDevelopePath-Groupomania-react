@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import RequireAuth from './Components/requireAuth/RequireAuth';
 import Main from './Pages/main/Main';
-import Post from './Components/postPage/Post';
+import Post from './Pages/postPage/Post';
 import Login from './Pages/auth/login/Login';
 import Form from './Pages/auth/signup/SignupForms/Form';
 import Profile from './Pages/profile/Profile';
