@@ -242,11 +242,11 @@ exports.refreshToken = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-  const id = req.params.id;
+  const username = req.params.id;
 
   const user = await User.findOne({
     where: {
-      id: id,
+      username,
     },
   });
   if (!user) {

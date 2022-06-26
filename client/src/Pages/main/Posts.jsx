@@ -67,7 +67,7 @@ function Posts() {
                         <div
                           className='text-xs mb-2 dark:text-gray-400 block'
                           onClick={() => {
-                            navigate(`/profile/${post.userId}`);
+                            navigate(`/profile/${post.username}`);
                             MarkAsViewed(post.id);
                           }}
                         >

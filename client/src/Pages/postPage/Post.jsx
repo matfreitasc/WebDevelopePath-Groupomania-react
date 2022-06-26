@@ -79,7 +79,6 @@ function Post() {
           }
         )
         .then((res) => {
-          console.log('🚀 ~ file: Post.jsx ~ line 132 ~ .then ~ res', res);
           setComments(res.data);
           setComment('');
         });
@@ -97,7 +96,7 @@ function Post() {
                 <div
                   className='text-xs mb-2 dark:text-gray-400 block'
                   onClick={() => {
-                    navigate(`/profile/${post.userId}`);
+                    navigate(`/profile/${post.username}`);
                   }}
                 >
                   Posted by:{' '}
