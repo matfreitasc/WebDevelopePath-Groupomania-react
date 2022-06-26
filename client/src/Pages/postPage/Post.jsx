@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/solid';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Navbar from '../../Components/layout/navbar/Navbar';
 import useAuth from '../../hooks/useAuth';
@@ -94,9 +95,13 @@ function Post() {
         <div className='shadow rounded-md overflow-hidden bg-white dark:bg-slate-900 py-6'>
           <div className='px-5 py-2 dark:bg-gray-900 space-y-3 '>
             <div className='flex justify-between'>
-              <div>
-                <div
-                  className='text-xs mb-2 dark:text-gray-400 block'
+              <div className=''>
+                <ArrowLeftIcon
+                  className='h-4 w-4 absolute top-8 left-4 cursor-pointer'
+                  onClick={() => navigate('/')}
+                />
+                <span
+                  className='text-xs mb-2 ml-6 dark:text-gray-400 block'
                   onClick={() => {
                     navigate(`/profile/${post.username}`);
                   }}
@@ -105,7 +110,7 @@ function Post() {
                   <p className='inline-block hover:underline '>
                     {post.username}
                   </p>
-                </div>
+                </span>
                 {userId === post.userId && showEdit === true ? (
                   <input
                     type='text'
