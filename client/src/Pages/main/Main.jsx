@@ -6,7 +6,7 @@ function Main() {
   return (
     <div className='overflow-x-hidden'>
       <Navbar />
-      <section className='w-full flex justify-evenly mt-2 transition-all px-2'>
+      <section className='w-full flex justify-evenly mt-2 transition-all px-2 '>
         <Posts />
       </section>
     </div>

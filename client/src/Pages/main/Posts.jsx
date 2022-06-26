@@ -55,7 +55,7 @@ function Posts() {
   return (
     <main className=''>
       <CreatePost />
-      <div className='overflow-x-hidden max-w-3xl'>
+      <div className='overflow-x-hidden max-w-3xl md:min-w-[38rem]'>
         {posts.map((post) => (
           <div key={post.id}>
             <div className='mt-5 '>
@@ -79,13 +79,15 @@ function Posts() {
                             {Moment.utc(post.createdAt).fromNow()}
                           </p>
                         </div>
-
+                        {
+                          (console.log('PostId', post.id),
+                          console.log('UserId', userId),
+                          console.log('Post.userId', post.userId))
+                        }
                         <Viewed
                           postId={post.id}
                           postViewes={post.Viewes}
                           userId={userId}
-                          postUserId={post.userId}
-                          date={post.createdAt}
                         />
                       </section>
 
