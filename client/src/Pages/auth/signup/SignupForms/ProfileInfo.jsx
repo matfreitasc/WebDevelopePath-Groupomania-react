@@ -43,7 +43,10 @@ function ProfileInfo({ setName, setUsername, profile_image, setProfileImage }) {
                   className='h-full object-cover object-center bg-no-repeat text-transparent'
                 />
               </div>
-              <p className='mt-4'>Click here to upload your profile picture</p>
+              <p className='mt-4'>
+                Click here to upload your profile picture
+                <span className='text-red-700'>*</span>
+              </p>
             </div>
             <input
               required
