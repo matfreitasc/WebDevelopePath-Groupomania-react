@@ -17,6 +17,8 @@ function Post() {
   const [totalViews, setTotalViews] = useState(0);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [userId] = useState(auth?.userId);
   const [showEdit, setShowEdit] = useState(false);
 
@@ -107,22 +109,9 @@ function Post() {
                 {userId === post.userId && showEdit === true ? (
                   <input
                     type='text'
-                    value={post.title}
+                    defaultValue={post.title}
                     className='text-black font-bold text-xl px-1 dark:text-white bg-transparent rounded-sm border-2 border-gray-400 dark:border-gray-300'
-                    onChange={(e) =>
-                      setPost({ ...post, title: e.target.value })
-                    }
-                    onBlur={() => {
-                      axiosPrivate
-                        .put(`/posts/${id}`, {
-                          title: post.title,
-                          body: post.body,
-                          userId: post.userId,
-                        })
-                        .then((res) => {
-                          setPost({ ...post, title: res.data.title });
-                        });
-                    }}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 ) : (
                   <h1 className='text-black font-semibold text-xl dark:text-white'>
@@ -158,20 +147,48 @@ function Post() {
                   leaveTo='transform opacity-0 scale-95'
                 >
                   <Menu.Items className='absolute right-0 mr-2 top-8 w-fit rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none '>
-                    <Menu.Item>
-                      <button
-                        onClick={() => {
-                          if (userId === post.userId && showEdit === false) {
-                            setShowEdit(true);
-                          } else {
-                            setShowEdit(false);
-                          }
-                        }}
-                        className='block px-4 py-2'
-                      >
-                        Edit
-                      </button>
-                    </Menu.Item>
+                    {showEdit === true ? (
+                      <Menu.Item>
+                        <button
+                          onClick={() => {
+                            axiosPrivate
+                              .put(`/posts/${id}`, {
+                                title: title,
+                                content: content,
+                                body: post.body,
+                                userId: post.userId,
+                              })
+                              .then((res) => {
+                                setPost({
+                                  ...post,
+                                  title: title,
+                                  content: content,
+                                });
+                                setShowEdit(false);
+                              });
+                          }}
+                          className='block px-4 py-2'
+                        >
+                          Save
+                        </button>
+                      </Menu.Item>
+                    ) : (
+                      <Menu.Item>
+                        <button
+                          onClick={() => {
+                            if (userId === post.userId && showEdit === false) {
+                              setShowEdit(true);
+                            } else {
+                              setShowEdit(false);
+                            }
+                          }}
+                          className='block px-4 py-2'
+                        >
+                          Edit
+                        </button>
+                      </Menu.Item>
+                    )}
+
                     <Menu.Item>
                       <button
                         onClick={() => {
@@ -189,20 +206,9 @@ function Post() {
             {userId === post.userId && showEdit === true ? (
               <textarea
                 type='text'
-                value={post.content}
+                defaultValue={post.content}
                 className=' dark:text-gray-300 bg-transparent shadow-sm  block w-full h-10 sm:text-sm border-2 border-gray-300 rounded-sm p-1'
-                onChange={(e) => setPost({ ...post, content: e.target.value })}
-                onBlur={() => {
-                  axiosPrivate
-                    .put(`/posts/${id}`, {
-                      content: post.content,
-                      body: post.body,
-                      userId: post.userId,
-                    })
-                    .then((res) => {
-                      setPost({ ...post, content: res.data.content });
-                    });
-                }}
+                onChange={(e) => setContent(e.target.value)}
               />
             ) : (
               <p className='dark:text-gray-300'>{post.content}</p>
