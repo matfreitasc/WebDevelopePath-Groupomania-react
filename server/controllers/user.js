@@ -268,7 +268,7 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const url = req.protocol + '://' + req.get('host');
   const id = req.params.id;
-  const { email, password, name, username } = req.body;
+  const { email, password, name, username, bio } = req.body;
   const user = await User.findOne({
     where: {
       id: id,
@@ -314,6 +314,12 @@ exports.updateUser = async (req, res) => {
       profile_image: url + '/images/' + req.file.filename,
     });
   }
+  if (bio) {
+    user.update({
+      bio,
+    });
+  }
+
   res.status(200).json({
     resStatus: true,
     message: 'Profile updated successfully',

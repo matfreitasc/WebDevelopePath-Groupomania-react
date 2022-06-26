@@ -15,6 +15,7 @@ function classNames(...classes) {
 export default function Main() {
   const { auth } = useAuth();
   let navigate = useNavigate();
+  const [username, setUsername] = useState('');
   const [userId, setUserId] = useState('');
   const [userImage, setUserImage] = useState('');
   const logout = useLogout();
@@ -25,6 +26,7 @@ export default function Main() {
   };
   useEffect(() => {
     if (auth) {
+      setUsername(auth.username);
       setUserId(auth.userId);
       setUserImage(auth.profilePicture);
     }
@@ -68,7 +70,7 @@ export default function Main() {
                       {({ active }) => (
                         <p
                           onClick={() => {
-                            navigate(`/profile/${userId}`);
+                            navigate(`/profile/${username}`);
                           }}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
