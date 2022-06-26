@@ -14,6 +14,7 @@ export default function Modal() {
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
+  const [noTittle, setNoTittle] = useState(false);
 
   useEffect(() => {
     if (auth) {
@@ -60,6 +61,10 @@ export default function Modal() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (title === '') {
+      setNoTittle(true);
+      return;
+    }
     const formData = new FormData();
     selectedImages.forEach((image) => {
       formData.append('image', image);
@@ -92,6 +97,16 @@ export default function Modal() {
       <section className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
         <form encType='multipart/form-data'>
           <div className='mt-2'>
+            <p
+              className={
+                noTittle && !title
+                  ? 'w-full text-red border-2 border-red-700 p-2 rounded-lg text-center'
+                  : 'sr-only'
+              }
+              aria-live='assertive'
+            >
+              Please enter a tittle
+            </p>
             <label
               htmlFor='title'
               className='block text-sm font-medium leading-5 text-gray-700'
