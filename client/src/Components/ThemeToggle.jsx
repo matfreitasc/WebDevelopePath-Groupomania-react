@@ -6,7 +6,7 @@ const Toggle = (props) => {
   const { theme, setTheme } = React.useContext(ThemeContext);
 
   return (
-    <div className='transition duration-500 ease-in-out rounded-full w-full '>
+    <div className='transition duration-500 ease-in-out rounded-full w-full cursor-pointer '>
       {theme === 'dark' ? (
         <div
           className='flex flex-row justify-between gap-2 items-center'
