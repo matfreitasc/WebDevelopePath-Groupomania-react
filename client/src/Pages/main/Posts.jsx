@@ -79,11 +79,6 @@ function Posts() {
                             {Moment.utc(post.createdAt).fromNow()}
                           </p>
                         </div>
-                        {
-                          (console.log('PostId', post.id),
-                          console.log('UserId', userId),
-                          console.log('Post.userId', post.userId))
-                        }
                         <Viewed
                           postId={post.id}
                           postViewes={post.Viewes}
@@ -168,7 +163,13 @@ function Posts() {
                     <div className='flex row justify-between items-center'>
                       <Like userId={post.userId} postId={post.id} />
                       <div className='flex flex-row align-middle items-center'>
-                        <ChatAlt2Icon className=' w-5 h-5 stroke-white' />
+                        <ChatAlt2Icon
+                          className=' w-5 h-5 dark:stroke-white cursor-pointer'
+                          onClick={() => {
+                            navigate(`/post/${post.id}`);
+                            MarkAsViewed(post.id);
+                          }}
+                        />
                         <p className='ml-3 dark:text-white'>
                           {post.Comments.length}
                         </p>

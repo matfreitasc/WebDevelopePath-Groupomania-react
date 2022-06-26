@@ -38,9 +38,7 @@ export default function Modal() {
       multiple: false,
       maxFilesize: 50,
       accept: {
-        'image/png': ['.png'],
-        'image/gif': ['.gif'],
-        'image/jpeg': ['.jpg', '.jpeg'],
+        'image/*': ['.png', '.gif', '.jpeg', '.jpg', '.bmp', '.webp'],
       },
       noDragEventsBubbling: true,
     });
@@ -90,7 +88,7 @@ export default function Modal() {
       });
   };
   return (
-    <section className='w-full relative inline-block align-bottom bg-white rounded-lg  overflow-hidden shadow-xl transform transition-all '>
+    <section className=' max-w-3xl w-full relative inline-block align-bottom bg-white rounded-lg  overflow-hidden shadow-xl transform transition-all '>
       <section className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
         <form encType='multipart/form-data'>
           <div className='mt-2'>

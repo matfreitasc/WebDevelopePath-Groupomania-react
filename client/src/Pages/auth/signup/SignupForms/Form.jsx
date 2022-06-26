@@ -90,7 +90,7 @@ function Form() {
               Already have an account?
               <a
                 href='/login'
-                className='font-medium text-indigo-600 hover:text-indigo-500 dark:text-white ml-2 dark:hover:text-indigo-500'
+                className='font-medium text-indigo-600 hover:text-indigo-500 underline  dark:text-white ml-2 dark:hover:text-indigo-500 cursor-pointer'
               >
                 Login
               </a>

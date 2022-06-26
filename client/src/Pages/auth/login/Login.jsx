@@ -67,12 +67,12 @@ export default function Login() {
             </div>
             <section className='w-full flex items-center flex-col'>
               <div className='inline-block right-0  text-center'>
-                <p className='block font-medium text-indigo-600 hover:text-indigo-500 dark:text-white ml-2'>
+                <p className='block font-medium  dark:text-white ml-2'>
                   Don't have an account?
                 </p>
                 <a
                   href='/signup'
-                  className='font-medium text-indigo-600 hover:text-indigo-500 dark:text-white ml-2 dark:hover:text-indigo-500'
+                  className='font-medium text-indigo-600 hover:text-indigo-500 underline  dark:text-white ml-2 dark:hover:text-indigo-500 cursor-pointer'
                 >
                   Signup today
                 </a>
