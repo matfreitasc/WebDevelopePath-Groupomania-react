@@ -17,3 +17,21 @@ In this project you will find all the following features listed below
 Future features 
 
 - [ ] Ability to edit the user banner in the user profile
+
+---
+Backend uses a .env file to store sensetive data.
+
+Please create a .env with this following code
+
+Access token and refresh token need to be generated. You can use the terminal to generate using node
+
+type: node (enter)
+
+require('crypto').randomBytes(64).toString('hex')
+
+Please generate one for Access Token and One for Refresh Token
+```
+ACCESS_TOKEN=
+REFRESH_TOKEN=
+PORT=3001
+DB_IP=(Your Mysql Database IP)
