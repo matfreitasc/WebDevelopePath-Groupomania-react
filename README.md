@@ -27,7 +27,7 @@ Access token and refresh token need to be generated. You can use the terminal to
 
 type: node (enter)
 
-require('crypto').randomBytes(64).toString('hex')
+> require('crypto').randomBytes(64).toString('hex')
 
 Please generate one for Access Token and One for Refresh Token
 ```
