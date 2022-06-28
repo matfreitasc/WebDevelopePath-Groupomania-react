@@ -12,17 +12,20 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     imageUrl: {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 
   Posts.associate = function (models) {
+    Posts.belongsTo(models.User, {
+      onDelete: 'CASCADE',
+    });
     Posts.hasMany(models.Comments, {
       onDelete: 'CASCADE',
     });

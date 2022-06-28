@@ -13,5 +13,14 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
     },
   });
+  Comments.associate = function (models) {
+    Comments.belongsTo(models.Posts, {
+      onDelete: 'CASCADE',
+    });
+    Comments.belongsTo(models.User, {
+      onDelete: 'CASCADE',
+    });
+  };
+
   return Comments;
 };

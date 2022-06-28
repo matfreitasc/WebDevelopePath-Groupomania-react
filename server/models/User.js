@@ -45,6 +45,14 @@ module.exports = function (sequelize, DataTypes) {
     User.hasMany(models.Viewes, {
       onDelete: 'CASCADE',
     });
+    User.hasMany(models.Posts, {
+      onchange: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
+    User.hasMany(models.Comments, {
+      onchange: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
   };
 
   return User;

@@ -14,7 +14,6 @@ export default function Profile() {
   const { auth } = useAuth();
   const [posts, setPosts] = useState([]);
   const [userBio, setUserBio] = useState('');
-  const [name, setName] = useState();
   const [showEdit, setShowEdit] = useState(false);
   const [username, setUsername] = useState();
   const [userImage, setUserImage] = useState();
@@ -147,7 +146,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className='mt-[5rem]'>
+        <div className=''>
           {posts.length !== 0 &&
             posts.map((post) => (
               <UserPost

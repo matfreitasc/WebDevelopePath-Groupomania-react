@@ -42,6 +42,7 @@ function Post() {
         const response = await axiosPrivate.get(`/posts/${id}`, {
           signal: controller.signal,
         });
+        console.log(response.data);
         isMounted && setPost(response.data.post);
         isMounted && setTotalViews(response.data.view);
       } catch (err) {
@@ -53,6 +54,7 @@ function Post() {
         const response = await axiosPrivate.get(`/comments/${id}`, {
           signal: controller.signal,
         });
+        console.log(response.data);
         isMounted && setComments(response.data);
       } catch (err) {
         navigate('/login', { state: { from: location }, replace: true });
@@ -97,11 +99,11 @@ function Post() {
             <div className='flex justify-between'>
               <div className=''>
                 <ArrowLeftIcon
-                  className='h-4 w-4 absolute top-8 left-4 cursor-pointer'
+                  className='h-4 w-4 absolute top-8 left-4 cursor-pointer dark:fill-white'
                   onClick={() => navigate('/')}
                 />
                 <span
-                  className='text-xs mb-2 ml-6 dark:text-gray-400 block'
+                  className='text-xs mb-2 ml-6 dark:text-gray-400 block '
                   onClick={() => {
                     navigate(`/profile/${post.username}`);
                   }}
@@ -268,7 +270,12 @@ function Post() {
                 className='bg-gray-50 rounded-md p-2 relative dark:bg-gray-900 dark:text-white shadow-md'
               >
                 <p>
-                  <span className='text-blue-500 dark:text-gray-500'>
+                  <span
+                    className=' dark:text-blue-500 text-gray-500 cursor-pointer '
+                    onClick={() => {
+                      navigate(`/profile/${comments.username}`);
+                    }}
+                  >
                     {comments.username}
                   </span>
                 </p>

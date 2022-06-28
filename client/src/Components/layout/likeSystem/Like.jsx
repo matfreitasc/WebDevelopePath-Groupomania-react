@@ -15,10 +15,7 @@ function Like(props) {
   const [disLikes, setDisLikes] = useState(0);
   const [likedAction, setLikedAction] = useState(false);
   const [disLikedAction, setDisLikedAction] = useState(false);
-  useEffect(() => {
-    getLikes();
-    getDislikes();
-  });
+
   const getLikes = async () => {
     const { data } = await axiosPrivate.post(`/likes/getLikes/`, {
       PostId: props.postId,
@@ -43,6 +40,10 @@ function Like(props) {
       }
     });
   };
+  useEffect(() => {
+    getLikes();
+    getDislikes();
+  }, []);
 
   const likePost = () => {
     axiosPrivate

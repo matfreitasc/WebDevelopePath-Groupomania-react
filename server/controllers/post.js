@@ -119,7 +119,7 @@ exports.updatePost = async (req, res) => {
 exports.getUserPosts = async (req, res) => {
   const post = await Posts.findAll({
     where: {
-      userId: req.params.id,
+      username: req.params.id,
     },
     order: [['updatedAt', 'DESC']],
     include: [
