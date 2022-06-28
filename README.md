@@ -12,13 +12,16 @@ In this project you will find all the following features listed below
 - [x] The blog contains a profile page where displays all the user posts
 - [x] There is a settings page where user can edit their profile information, update their password and delete their account.
 - [x] Implementation of a bio in the user profile.
+- [x] Cascade delete on user delete
 
 ---
-Future features 
+
+Future features
 
 - [ ] Ability to edit the user banner in the user profile
 
 ---
+
 Backend uses a .env file to store sensetive data.
 
 Please create a .env with this following code
@@ -30,8 +33,10 @@ type: node (enter)
 > require('crypto').randomBytes(64).toString('hex')
 
 Please generate one for Access Token and One for Refresh Token
+
 ```
 ACCESS_TOKEN=
 REFRESH_TOKEN=
 PORT=3001
 DB_IP=(Your Mysql Database IP)
+```
