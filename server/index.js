@@ -22,6 +22,7 @@ app.use(
       'http://localhost:3002',
       'http://localhost:*',
       'http://100.79.*.*',
+      'https://groupomania.matfreitas.dev/*',
     ],
     credentials: true,
   })
